@@ -1,0 +1,100 @@
+<div class="main">
+    <div class="container">
+        <!-- BEGIN SIDEBAR & CONTENT -->
+        <div class="row margin-bottom-40">
+            <!-- BEGIN CONTENT -->
+            <div class="col-md-12 col-sm-12">
+                <h1>Shopping cart</h1>
+                <div class="goods-page">
+                    <div class="goods-data clearfix">
+                        <div class="table-wrapper-responsive">
+                            <table summary="Shopping cart">
+                                <tr>
+                                    <th class="goods-page-image">Image</th>
+                                    <th class="goods-page-description">Description</th>
+                                    <th class="goods-page-ref-no">Ref No</th>
+                                    <th class="goods-page-quantity">Quantity</th>
+                                    <th class="goods-page-price">Unit price</th>
+                                    <th class="goods-page-total" colspan="2">Total</th>
+                                </tr>
+                                {{#each data}}
+                                <tr>
+                                    <!-- Các cột thông tin sản phẩm -->
+                                    <td class="goods-page-image">
+                                        <a href="javascript:;"><img src={{urls}} alt="Berry Lace Dress"></a>
+                                    </td>
+                                    <td class="goods-page-description">
+                                        <h3><a href="javascript:;">{{name}}</a></h3>
+                                        <p><strong>Item {{id}}</strong> - Color: Green; Size: S</p>
+                                        <em>{{description}}</em>
+                                    </td>
+                                    <td class="goods-page-ref-no">
+                                        javc2133
+                                    </td>
+                                    <td class="goods-page-quantity">
+                                        <div class="product-quantity">
+                                            <input type="number" value="1" class="form-control input-sm"
+                                                onchange="updateTotalPrice(this)">
+                                        </div>
+                                    </td>
+                                    <td class="goods-page-price">
+                                        <strong class="unit-price">${{price}}</strong>
+                                    </td>
+                                    <td class="goods-page-total">
+                                        <strong class="total-price">${{price}}</strong>
+                                    </td>
+                                    <td class="del-goods-col">
+                                        <a class="del-goods" href="javascript:;">&nbsp;</a>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                                <!-- Mã JavaScript nhúng vào trong file .hbs -->
+                                <script>
+                                    // Hàm cập nhật tổng giá trị cho sản phẩm cụ thể
+                                    function updateTotalPrice(input) {
+                                        // Lấy các phần tử DOM liên quan đến sản phẩm cụ thể
+                                        var row = input.closest('tr');
+                                        var unitPriceElement = row.querySelector('.unit-price');
+                                        var totalPriceElement = row.querySelector('.total-price');
+
+                                        // Lấy giá trị số lượng mới từ input
+                                        var quantity = input.value;
+
+                                        // Lấy giá trị đơn giá từ DOM
+                                        var unitPrice = parseFloat(unitPriceElement.innerText.replace("$", ""));
+
+                                        // Tính tổng giá trị mới
+                                        var totalPrice = unitPrice * quantity;
+
+                                        // Cập nhật tổng giá trị vào DOM
+                                        totalPriceElement.innerText = "$" + totalPrice.toFixed(2);
+                                    }
+                                </script>
+                            </table>
+                        </div>
+
+                        <div class="shopping-total">
+                            <ul>
+                                <li>
+                                    <em>Sub total</em>
+                                    <strong class="price"><span>$</span>47.00</strong>
+                                </li>
+                                <li>
+                                    <em>Shipping cost</em>
+                                    <strong class="price"><span>$</span>3.00</strong>
+                                </li>
+                                <li class="shopping-total-price">
+                                    <em>Total</em>
+                                    <strong class="price"><span>$</span>50.00</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="btn btn-default" type="submit"><a href="/*" style="color: black">Continue
+                        shopping</a> <i class="fa fa-shopping-cart"></i></button>
+                    <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
