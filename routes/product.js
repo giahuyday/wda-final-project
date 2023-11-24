@@ -72,12 +72,9 @@ router.get('/cart', function(req, res, next){
       res.send("Failed !");
     } else {
       console.log(result);
-      // res.send(result);
-      // res.render()
-      // res.render("product/", { data: result });
       res.render('cart', {data: result})
     }
-    // res.send(result)
+    
   })
 })
 module.exports = router;
