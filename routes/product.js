@@ -21,7 +21,30 @@ router.get("/product-detail", function (req, res, next) {
   );
 });
 
-router.post("/create_product", function (req, res, next) {
+// Endpoint API để xử lý yêu cầu POST từ client
+router.post('/api/search', (req, res) => {
+  const category = req.body.category;
+  console.log(category);
+
+  // Chuyển hướng đến URL có dạng /search/:category
+  res.json('success')
+});
+
+// Endpoint API để xử lý yêu cầu GET từ client
+router.get('/search/:category', (req, res) => {
+  const category = req.params.category;
+  connection.query('SELECT Product.*, Image.urls FROM Product, Category, Image WHERE Product.category_id = Category.id AND Product.id = Image.product_id AND Category.name = ?', [category], (err, result) => {
+    if(err){
+      res.json(err)
+    }
+    else{
+      console.log(res.values)
+      res.render('product/search', {data: result})
+    }
+  })
+});
+
+router.post("/api/create_product", function (req, res, next) {
   console.log(req.body);
   const name = req.body.name;
   const description = req.body.description;
