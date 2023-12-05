@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/product-detail", function (req, res, next) {
   connection.query(
-    "SELECT * FROM product, image WHERE product.id = image.product_id AND product.id = 1",
+    "SELECT * FROM Product, Image WHERE Product.id = Image.product_id AND Product.id = 1",
     (err, result) => {
       if (err) {
         res.render(err);
@@ -89,7 +89,7 @@ router.get('/cart', function(req, res, next){
   //   title: "Cart"
   // })
 
-  connection.query("SELECT * FROM cart, account, product, image WHERE account.id = cart.account_id and product.id = cart.product_id and product.id = image.product_id", (err, result) => {
+  connection.query("SELECT * FROM Cart, Account, Product, image WHERE Account.id = Cart.account_id and Product.id = Cart.product_id and Product.id = Image.product_id", (err, result) => {
     if (err) {
       res.render(err);
       res.send("Failed !");
