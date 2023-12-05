@@ -25,7 +25,8 @@
                                     </td>
                                     <td class="goods-page-description">
                                         <h3><a href="javascript:;">{{name}}</a></h3>
-                                        <p><strong>Item {{id}}</strong> - Color: Green; Size: S</p>
+                                        <p><strong>Item {{id}}</strong> - Color:
+                                            Green; Size: S</p>
                                         <em>{{description}}</em>
                                     </td>
                                     <td class="goods-page-ref-no">
@@ -66,32 +67,59 @@
                                         // Tính tổng giá trị mới
                                         var totalPrice = unitPrice * quantity;
 
-                                        // Cập nhật tổng giá trị vào DOM
-                                        totalPriceElement.innerText = "$" + totalPrice.toFixed(2);
+                                        // Cập nhật tổng giá trị của sản phẩm vào DOM
+                                        totalPriceElement.innerText = "$" + totalPrice.toFixed(0);
+
+                                        // Cập nhật tổng giá trị của tất cả sản phẩm và phí vận chuyển
+                                        updateGrandTotal();
+                                    }
+
+                                    // Hàm cập nhật tổng giá trị của tất cả sản phẩm và phí vận chuyển
+                                    function updateGrandTotal() {
+                                        // Lấy tất cả các phần tử total-price trong bảng
+                                        var totalElements = document.querySelectorAll('.total-price');
+
+                                        // Tính tổng giá trị của tất cả sản phẩm
+                                        var grandTotal = Array.from(totalElements).reduce(function (sum, element) {
+                                            var price = parseFloat(element.innerText.replace("$", ""));
+                                            return sum + price;
+                                        }, 0);
+
+                                        // Phí vận chuyển mặc định
+                                        var shippingFee = 5.00;
+
+                                        // Tổng giá trị kết hợp phí vận chuyển
+                                        var totalWithShipping = grandTotal + shippingFee;
+
+                                        // Hiển thị tổng giá trị và phí vận chuyển mới trong phần tử có class là "shopping-total"
+                                        document.querySelector('.shopping-total li.em-subtotal strong.price').innerText = "$" + grandTotal.toFixed(0);
+                                        document.querySelector('.shopping-total li.em-shipping strong.price').innerText = "$" + shippingFee.toFixed(0);
+                                        document.querySelector('.shopping-total li.shopping-total-price strong.price').innerText = "$" + totalWithShipping.toFixed(0);
                                     }
                                 </script>
                             </table>
                         </div>
 
+                        <!-- Phần tử chứa tổng giá trị của tất cả sản phẩm và phí vận chuyển -->
                         <div class="shopping-total">
                             <ul>
-                                <li>
+                                <li class="em-subtotal">
                                     <em>Sub total</em>
-                                    <strong class="price"><span>$</span>47.00</strong>
+                                    <strong class="price"><span>$</span>0.00</strong>
                                 </li>
-                                <li>
+                                <li class="em-shipping">
                                     <em>Shipping cost</em>
-                                    <strong class="price"><span>$</span>3.00</strong>
+                                    <strong class="price"><span>$</span>0.00</strong>
                                 </li>
                                 <li class="shopping-total-price">
                                     <em>Total</em>
-                                    <strong class="price"><span>$</span>50.00</strong>
+                                    <strong class="price"><span>$</span>0.00</strong>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <button class="btn btn-default" type="submit"><a href="/*" style="color: black">Continue
-                        shopping</a> <i class="fa fa-shopping-cart"></i></button>
+                            shopping</a> <i class="fa fa-shopping-cart"></i></button>
                     <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
                 </div>
             </div>

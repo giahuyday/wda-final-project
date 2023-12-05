@@ -1,12 +1,13 @@
 CREATE TABLE Account (
     id INT,
     username VARCHAR(255),
-    password VARCHAR(255),
+    password TEXT,
     name NVARCHAR(255),
     address NVARCHAR(255),
     phone NVARCHAR(10),
     email VARCHAR(50),
-
+    salt TEXT,
+    
     is_deleted BOOLEAN DEFAULT FALSE,
     is_activated BOOLEAN DEFAULT TRUE,
 

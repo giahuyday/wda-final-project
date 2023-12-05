@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
+const connection = require('./connection')
 /* GET home page. */
 router.get('/', function(req, res, next) {
    // Query data from MySQL
-   connection.query('SELECT * FROM product, image WHERE product.id = image.product_id', (error, results) => {
+   connection.query('SELECT * FROM Product, Image WHERE Product.id = Image.product_id', (error, results) => {
+    console.log(results)
     if (error) {
         console.error('Error querying database:', error);
         res.status(500).send('Internal Server Error');
