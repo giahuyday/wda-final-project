@@ -1,3 +1,39 @@
+-- tạo Account mới 
+DELIMITER //
+
+CREATE PROCEDURE AddAccount(
+  IN p_UserName varchar(50),
+  IN p_Password text,
+  IN p_Name nvarchar(50),
+  IN p_Email varchar(50),
+  IN p_Phone varchar(50),
+  IN p_Address nvarchar(100),
+  IN p_Salt TEXT
+)
+BEGIN
+
+  DECLARE newAccountID INT;
+  DECLARE usernameCount INT;
+  
+  SELECT COUNT(*) INTO usernameCount FROM Account WHERE UserName = p_UserName;
+  
+  IF usernameCount > 0 THEN
+    SELECT 1 AS Result;
+  ELSE
+    SET newAccountID = (SELECT COUNT(*) + 1 FROM Account);
+    INSERT INTO Account (id, username, password, name, email, phone, address, salt)
+    VALUES (newAccountID, p_UserName, p_Password, p_Name, p_Email, p_Phone, p_Address, p_Salt);
+    SELECT 0 AS Result, newAccountID AS AccountID;
+  END IF;
+END //
+
+DELIMITER ;
+
+
+-- CALL AddAccount('johny', 'password4', 'Johny', '2001-05-04', 8000, 'johny@example.com', '127536789', '123 Main St');
+-- ----------------------------------
+
+
 
 -- tạo 1 Product mới (dùng cho admin thêm hàng mới để bày bán) chứ ko phải là mua hàng 
 DELIMITER //
@@ -46,9 +82,9 @@ BEGIN
     IF v_ProductCount > 0 THEN
         SELECT Name INTO v_Name FROM Product WHERE id = p_ProductID;
         
-        SET @count = (SELECT COUNT(*) FROM image) + 1;
+        SET @count = (SELECT COUNT(*) FROM Image) + 1;
         
-        INSERT INTO image (id, product_id, urls)
+        INSERT INTO Image (id, product_id, urls)
         VALUES (@count, p_ProductID, p_urls);
         
         SELECT 1 AS Result; 
