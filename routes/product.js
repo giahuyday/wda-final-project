@@ -2,21 +2,17 @@ const connection = require("./connection");
 const express = require("express");
 const router = express.Router();
 
-router.get("/product-detail", function (req, res, next) {
+router.get("/product-detail/:id", function (req, res, next) {
   connection.query(
-    "SELECT * FROM Product, Image WHERE Product.id = Image.product_id AND Product.id = 1",
+    "SELECT * FROM Product, Image WHERE Product.id = Image.product_id AND Product.id = ?", [req.params.id],
     (err, result) => {
       if (err) {
         res.render(err);
         res.send("Failed !");
       } else {
         console.log(result);
-        // res.send(result);
-        // res.render()
-        // res.render("product/", { data: result });
         res.render('product', {data: result})
       }
-      // res.send(result)
     }
   );
 });
@@ -26,7 +22,6 @@ router.post('/api/search', (req, res) => {
   const category = req.body.category;
   console.log(category);
 
-  // Chuyển hướng đến URL có dạng /search/:category
   res.json('success')
 });
 
@@ -85,19 +80,34 @@ router.post("/api/create_product", function (req, res, next) {
 });
 
 router.get('/cart', function(req, res, next){
-  // res.render('cart', {
-  //   title: "Cart"
-  // })
+  if(req.user){
+    connection.query(`SELECT * FROM Cart, Product, Image WHERE Cart.account_id = '${req.user.id}' and Product.id = Cart.product_id and Product.id = Image.product_id`, (err, result) => {
+      if (err) {
+        res.render(err);
+        res.send("Failed !");
+      } else {
+        console.log(result);
+        res.render('cart', {data: result})
+      }
+      
+    })
+  }
+  else{
+    res.render('cart', {title: 'Cart'})
+  }
+})
 
-  connection.query("SELECT * FROM Cart, Account, Product, image WHERE Account.id = Cart.account_id and Product.id = Cart.product_id and Product.id = Image.product_id", (err, result) => {
-    if (err) {
-      res.render(err);
-      res.send("Failed !");
-    } else {
-      console.log(result);
-      res.render('cart', {data: result})
+
+router.post('/api/addtocart/:id', (req, res, next) => {
+  const product_id = req.params.id
+
+  connection.query('CALL Add_Product2Cart(?, ?)', [req.user.id, product_id], (err, result) => {
+    if(err){
+      console.log(err)
     }
-    
+
+    res.json("Add to Cart success")
   })
 })
+
 module.exports = router;

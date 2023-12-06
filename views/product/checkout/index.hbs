@@ -1,0 +1,69 @@
+<div class="container mt-5">
+    <h1 class="mb-4">Checkout</h1>
+
+    <div class="row">
+        <!-- Phần thông tin cá nhân (1 nửa) -->
+        {{#each data}}
+        {{#if @first}}
+        <div class="col-md-6">
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label for="address">Địa chỉ:</label>
+                    <input type="text" class="form-control" id="address" name="address" value="{{address}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" value="{{phone}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{email}}">
+                </div>
+            </form>
+        </div>
+        {{/if}}
+        {{/each}}
+
+        <!-- Phần sản phẩm trong giỏ hàng (1 nửa) -->
+        <div class="table-wrapper-responsive">
+            <table summary="Shopping cart">
+                {{#each data}}
+                <tr>
+                    <!-- Các cột thông tin sản phẩm -->
+                    <td class="goods-page-image">
+                        <a href="javascript:;"><img src={{urls}} alt="Berry Lace Dress"></a>
+                    </td>
+                    <td class="goods-page-description">
+                        <h3><a href="/product/product-detail/{{id}}">{{name}}</a></h3>
+                        <p><strong>Item {{id}}</strong> - Color:
+                            Green; Size: S</p>
+                        <em>{{description}}</em>
+                    </td>
+                    <td class="goods-page-ref-no">
+                        {{id}}
+                    </td>
+                    <td class="goods-page-quantity">
+                        <div class="product-quantity">
+                            <input type="number" value="1" class="form-control input-sm"
+                                onchange="updateTotalPrice(this)">
+                        </div>
+                    </td>
+                    <td class="goods-page-total">
+                        <strong class="total-price">${{price}}</strong>
+                    </td>
+                    <td class="del-goods-col">
+                        <a class="del-goods" href="javascript:;">&nbsp;</a>
+                    </td>
+                </tr>
+                {{/each}}
+                <!-- Mã JavaScript nhúng vào trong file .hbs -->
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary">Đặt hàng</button>
+    </div>
+</div>

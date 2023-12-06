@@ -7,7 +7,7 @@ CREATE TABLE Account (
     phone NVARCHAR(10),
     email VARCHAR(50),
     salt TEXT,
-    
+    admin BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,
     is_activated BOOLEAN DEFAULT TRUE,
 
@@ -23,10 +23,32 @@ CREATE TABLE Product (
 	category_id INT,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
     is_deleted BOOLEAN DEFAULT FALSE,
+
     PRIMARY KEY (id)
 );
+
+CREATE TABLE Review{
+    id INT,
+    review TEXT,
+    rate INT,
+    account_id INT,
+    product_id INT,
+
+    PRIMARY KEY (id) 
+}
+
+CREATE TABLE Wislist{
+    id INT, 
+
+    product_id INT,
+    account_id INT,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_deleted  BOOLEAN DEFAULT FALSE,
+
+    PRIMARY KEY (id)
+}
 
 CREATE TABLE Category (
     id INT,
@@ -48,8 +70,9 @@ CREATE TABLE Cart (
     id INT,
 	account_id INT,
     product_id INT,
-    PRIMARY KEY (id, product_id)
+    PRIMARY KEY (id)
 );
+
 
 CREATE TABLE __Order (
     id INT,
@@ -70,13 +93,33 @@ ADD CONSTRAINT fk_Image_Product
 FOREIGN KEY (product_id) REFERENCES Product(id);
 
 ALTER TABLE Cart
+ADD CONSTRAINT fk_Cart_Account
+FOREIGN KEY (account_id) REFERENCES Account(id);
+
+ALTER TABLE Cart
 ADD CONSTRAINT fk_Cart_Product
 FOREIGN KEY (product_id) REFERENCES Product(id);
 
-ALTER TABLE __Order
-ADD CONSTRAINT fk_Order_Account
-FOREIGN KEY (account_id) REFERENCES Account(id);
+ALTER TABLE CartItems
+ADD CONSTRAINT fk_CartItmes_Product
+FOREIGN KEY (product_id) REFERENCES Product(id)
 
 ALTER TABLE __Order
 ADD CONSTRAINT fk_Order_Product
 FOREIGN KEY  (product_id) REFERENCES Product(id);
+
+ALTER TABLE Review
+ADD CONSTRAINT fk_Review_Account
+FOREIGN KEY (account_id) REFERENCES Account(id);
+
+ALTER TABLE Review
+ADD CONSTRAINT fk_Review_Product
+FOREIGN KEY (product_id) REFERENCES Product(id);
+
+ALTER TABLE Wislist
+ADD CONSTRAINT fk_Wislist_Account
+FOREIGN KEY (account_id) REFERENCES Account(id);
+
+ALTER TABLE Wislist
+ADD CONSTRAINT fk_Wislist_Product
+FOREIGN KEY (product_id) REFERENCES Product(id);

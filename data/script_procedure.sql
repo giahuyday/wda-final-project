@@ -96,3 +96,22 @@ END //
 DELIMITER ;
 -- CALL Add_ProductPicture('Product44', 'https://marketingai.vn/wp-urls/uploads/2023/02/332867346_700587748460794_8977339113547331667_n.jpg');
 -- --------------------------
+
+
+DELIMITER //
+CREATE PROCEDURE Add_Product2Cart(
+  IN p_AccountID INT,
+  IN p_ProductID INT
+)
+BEGIN
+    DECLARE newIDCount INT;
+    DECLARE newProductID INT;
+    
+    SET newIDCount = (SELECT COUNT(*) + 1 FROM Cart);
+    SET newProductID = newIDCount;
+    INSERT INTO Cart(id, account_id, product_id)
+    VALUES (newProductID, p_AccountID, p_ProductID);
+    SELECT newProductID AS ID;
+END //
+
+DELIMITER ;

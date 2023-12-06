@@ -24,13 +24,13 @@
                                         <a href="javascript:;"><img src={{urls}} alt="Berry Lace Dress"></a>
                                     </td>
                                     <td class="goods-page-description">
-                                        <h3><a href="javascript:;">{{name}}</a></h3>
+                                        <h3><a href="/product/product-detail/{{id}}">{{name}}</a></h3>
                                         <p><strong>Item {{id}}</strong> - Color:
                                             Green; Size: S</p>
                                         <em>{{description}}</em>
                                     </td>
                                     <td class="goods-page-ref-no">
-                                        javc2133
+                                        {{id}}
                                     </td>
                                     <td class="goods-page-quantity">
                                         <div class="product-quantity">
@@ -51,6 +51,18 @@
                                 {{/each}}
                                 <!-- Mã JavaScript nhúng vào trong file .hbs -->
                                 <script>
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        // Cập nhật tổng giá trị của tất cả sản phẩm và phí vận chuyển khi trang được load
+                                        updateGrandTotal();
+
+                                        // Gắn sự kiện cho các input số lượng để cập nhật tổng giá trị khi người dùng thay đổi số lượng
+                                        var quantityInputs = document.querySelectorAll('.quantity-input');
+                                        quantityInputs.forEach(function (input) {
+                                            input.addEventListener('input', function () {
+                                                updateTotalPrice(input);
+                                            });
+                                        });
+                                    });
                                     // Hàm cập nhật tổng giá trị cho sản phẩm cụ thể
                                     function updateTotalPrice(input) {
                                         // Lấy các phần tử DOM liên quan đến sản phẩm cụ thể
@@ -118,9 +130,9 @@
                             </ul>
                         </div>
                     </div>
-                    <button class="btn btn-default" type="submit"><a href="/*" style="color: black">Continue
+                    <button class="btn btn-default" type="submit"><a href="/" style="color: black">Continue
                             shopping</a> <i class="fa fa-shopping-cart"></i></button>
-                    <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
+                    <button class="btn btn-primary" type="submit"><a href="/checkout" style="color: white">Checkout </a><i class="fa fa-check"></i></button>
                 </div>
             </div>
         </div>
