@@ -7,9 +7,9 @@ CREATE TABLE Account (
     phone NVARCHAR(10),
     email VARCHAR(50),
     salt TEXT,
-    admin BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,
     is_activated BOOLEAN DEFAULT TRUE,
+    admin BOOLEAN DEFAULT FALSE,
 
     PRIMARY KEY (id)
 );
@@ -28,31 +28,9 @@ CREATE TABLE Product (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE Review{
-    id INT,
-    review TEXT,
-    rate INT,
-    account_id INT,
-    product_id INT,
-
-    PRIMARY KEY (id) 
-}
-
-CREATE TABLE Wislist{
-    id INT, 
-
-    product_id INT,
-    account_id INT,
-
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_deleted  BOOLEAN DEFAULT FALSE,
-
-    PRIMARY KEY (id)
-}
-
 CREATE TABLE Category (
     id INT,
-    name NVARCHAR(255),
+    catename NVARCHAR(255),
     description NVARCHAR(255),
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -73,6 +51,13 @@ CREATE TABLE Cart (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE Review (
+    id INT, 
+    account_id INT, 
+    product_id INT, 
+    review_content TEXT,
+    PRIMARY KEY (id)
+)
 
 CREATE TABLE __Order (
     id INT,

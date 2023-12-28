@@ -1,0 +1,44 @@
+ <div class="sidebar m-5">
+  <ul id="categoryList">
+    <li class="list-group-item clearfix">
+      <a id="cate" href="/product/filter/{{catename}}"
+        data-category="{{catename}}"
+        class="category-link">{{catename}}</a>
+    </li>
+  </ul>
+</div>
+
+<script>
+    fetch('/category', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+      // Access the array of categories
+      const categories = data.data;
+
+      // Get the ul element where you want to insert the categories
+      const categoryList = document.getElementById('categoryList');
+
+      // Iterate over the categories and create list items
+      categories.forEach(category => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item clearfix';
+
+        const link = document.createElement('a');
+        link.href = `/product/filter/${category.catename}`;
+        link.setAttribute('data-category', category.catename);
+        link.className = 'category-link';
+        link.textContent = category.catename;
+
+        listItem.appendChild(link);
+        categoryList.appendChild(listItem);
+      });
+    })
+          .catch(error => {
+            console.log('Error:', error);
+          });
+</script>

@@ -115,3 +115,24 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE Add_Review(
+  IN p_AccountID INT,
+  IN p_ProductID INT,
+  IN p_review TEXT
+)
+BEGIN
+    DECLARE newIDCount INT;
+    DECLARE newProductID INT;
+    DECLARE newReview TEXT;
+
+    SET newIDCount = (SELECT COUNT(*) + 1 FROM Review);
+    SET newProductID = newIDCount;
+    INSERT INTO Review(id, account_id, product_id, review_content)
+    VALUES (newProductID, p_AccountID, p_ProductID, p_review);
+    SELECT newProductID AS ID;
+END //
+
+DELIMITER ;
