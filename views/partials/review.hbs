@@ -40,25 +40,23 @@
         <!--<p>There are no reviews for this product.</p>-->
         <div class="review-item clearfix">
             <div class="review-item-submitted">
-                <strong>Bob</strong>
+                <strong>{{username}}</strong>
                 <em>30/12/2013 - 07:37</em>
                 <div class="rateit" data-rateit-value="5"
                     data-rateit-ispreset="true"
                     data-rateit-readonly="true"></div>
             </div>
             <div class="review-item-content">
-                <p>Sed velit quam, auctor id semper a, hendrerit eget justo. Cum
-                    sociis natoque penatibus et magnis dis parturient montes,
-                    nascetur ridiculus mus. Duis vel arcu pulvinar dolor tempus
-                    feugiat id in orci. Phasellus sed erat leo. Donec luctus,
-                    justo eget ultricies tristique, enim mauris bibendum orci, a
-                    sodales lectus purus ut lorem.</p>
+                <p>{{review_content}}.</p>
             </div>
         </div>
 
+        <div class="reviewList">
+
+        </div>
+
         <!-- BEGIN FORM-->
-        <form class="reviews-form" role="form"
-            action="/auth/api/write_review/{{id}}" method="POST">
+        <form class="reviews-form" role="form" id="WriteReview">
             <h2>Write a review</h2>
             <div class="form-group">
                 <label for="name">Name<span class="require">*</span></label>
@@ -67,48 +65,92 @@
             <div class="form-group">
                 <label for="review">Review <span
                         class="require">*</span></label>
-                <input type="text" class="form-control" rows="8" id="review"></input>
+                <textarea class="form-control" rows="8" id="review"></textarea>
             </div>
             <div class="padding-top-20">
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit" class="btn btn-primary">Send
+                    Review</button>
             </div>
         </form>
         <!-- END FORM-->
 
     </div>
 </div>
-
 <script>
-    fetch('/reviews', {
-            method: 'GET',
+      document.getElementById('WriteReview').addEventListener('submit', function (event) {
+        event.preventDefault(); // Ngăn chặn form tự động submit
+
+        const review = document.getElementById('review').value;
+        fetch(`/auth/api/write_review/{{id}}`, {
+            method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ review: review }),
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-          })
-          .then(response => response.json())
-          .then(data => {
-      // Access the array of reviews
-      const reviews = data.data;
+            console.log(response.data)
+            updateReviewList();
+            return response.json();
+        })
+    });
 
-      // Get the ul element where you want to insert the reviews
-      const reviewList = document.getElementById('Reviews');
 
-      // Iterate over the reviews and create list items
-      reviews.forEach(category => {
-        const listItem = document.createElement('li');
-        listItem.className = 'list-group-item clearfix';
-
-        const link = document.createElement('a');
-        link.href = `/product/filter/${category.catename}`;
-        link.setAttribute('data-category', category.catename);
-        link.className = 'category-link';
-        link.textContent = category.catename;
-
-        listItem.appendChild(link);
-        categoryList.appendChild(listItem);
-      });
+    
+function updateReviewList() {
+    // Lấy danh sách đánh giá mới từ server bằng AJAX
+    fetch("/auth/api/product_reviews/{{id}}", {
+        method: "GET",
+        headers: {
+                'Content-Type': 'application/json',
+            },
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
     })
-          .catch(error => {
-            console.log('Error:', error);
-          });
-</script>
+    .then(data => {
+        console.log(data)
+        // Cập nhật nội dung danh sách đánh giá
+        document.getElementById('reviewList').innerHTML = data;
+
+        // Đặt lại sự kiện cho nút Gửi Đánh giá mới (nếu cần)
+        document.getElementById('WriteReview').addEventListener('submit', function () {
+            const review = document.getElementById('review').value;
+
+            fetch(`/product/api/product_reviews/{{id}}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ review: review }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Xử lý thành công, có thể thêm logic xử lý thông báo hoặc làm gì đó khác
+                console.log('Review submitted successfully:', data);
+
+                // Sau khi gửi đánh giá thành công, cập nhật danh sách đánh giá bằng AJAX
+                //updateReviewList();
+            })
+            .catch(error => {
+                console.error('Error submitting review:', error);
+            });
+        });
+    })
+    .catch(error => {
+        console.error('Error updating review list:', error);
+    });
+}
+
+// Ban đầu, gọi hàm để hiển thị danh sách đánh giá
+
+    </script>

@@ -21,7 +21,7 @@
 
         <!-- Custom styles for this template-->
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
+        <script src="../../src/auth/auth.service.js"></script>
     </head>
 
     <body class="bg-gradient-primary">
@@ -45,14 +45,18 @@
                                         <input type="text"
                                             class="form-control form-control-user"
                                             id="username"
-                                            placeholder="username">
+                                            placeholder="username"
+                                            onblur="checkAvailability()">
+                                        <span id="availability-status"></span>
                                     </div>
                                     <div class="form-group">
                                         <input type="email"
                                             class="form-control form-control-user"
                                             id="email"
-                                            placeholder="Email Address">
+                                            placeholder="Email Address"
+                                            onblur="checkMailAvailability()">
                                     </div>
+                                    <span id="availability-status1"></span>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="password"
@@ -68,11 +72,12 @@
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="forgot-password.html">Forgot
+                                    <a class="small"
+                                        href="forgot-password.html">Forgot
                                         Password?</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="login.html">Already
+                                    <a class="small" href="/auth/login">Already
                                         have an account? Login!</a>
                                 </div>
                             </div>
@@ -104,12 +109,47 @@
             })
         });
     </script>
+        <script>
+    function checkAvailability() {
+      var username = $('#username').val();
+
+      // Make an AJAX request to the server to check availability
+      $.ajax({
+        type: 'GET',  
+        url: '/auth/api/username',  // Replace with the actual server-side script
+        data: { username: username },
+        success: function(response) {
+            console.log(response)
+          // Update the availability status based on the server response
+          $('#availability-status').html(response);
+        }
+      });
+    }
+    function checkMailAvailability() {
+      var email = $('#email').val();
+
+      // Make an AJAX request to the server to check availability
+      $.ajax({
+        type: 'GET',  
+        url: '/auth/api/email',  // Replace with the actual server-side script
+        data: { email: email },
+        success: function(response) {
+            console.log(response)
+          // Update the availability status based on the server response
+          $('#availability-status1').html(response);
+        }
+      });
+    }
+    </script>
+
         <!-- Bootstrap core JavaScript-->
         <script src="../admin/vendor/jquery/jquery.min.js"></script>
-        <script src="../admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script
+            src="../admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
         <!-- Core plugin JavaScript-->
-        <script src="../admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script
+            src="../admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
         <!-- Custom scripts for all pages-->
         <script src="../admin/js/sb-admin-2.min.js"></script>

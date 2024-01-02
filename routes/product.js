@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/product-detail/:id", function (req, res, next) {
   connection.query(
-    "SELECT * FROM Product, Image, Review, Account WHERE Product.id = Image.product_id AND Product.id = ?",
+    "SELECT * FROM Product, Image WHERE Product.id = Image.product_id AND Product.id = ?",
     [req.params.id],
     (err, result) => {
       if (err) {

@@ -103,20 +103,100 @@ router.post("/api/register", function (req, res, next) {
   );
 });
 
-router.post("/api/write_review/:id", isAuth, (req, res, next) => {
-  console.log(req);
-  console.log(req.body);
+router.get("/api/username", (req, res, next) => {
+  const username = req.query.username;
+
+  // Kiểm tra xem username có được cung cấp không
+  if (!username) {
+    return res.status(400).send("Missing username parameter");
+  }
+
+  connection.query(
+    "SELECT username FROM Account WHERE username = ?",
+    [username],
+    (err, result) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).send("Internal Server Error");
+      }
+
+      if (result.length > 0) {
+        res.status(200).send("Username is used");
+      } else {
+        res.status(200).send("Valid Username");
+      }
+    }
+  );
+});
+
+router.get("/api/email", (req, res, next) => {
+  const email = req.query.email;
+
+  // Kiểm tra xem username có được cung cấp không
+  if (!email) {
+    return res.status(400).send("Missing username parameter");
+  }
+
+  connection.query(
+    "SELECT email FROM Account WHERE email = ?",
+    [email],
+    (err, result) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).send("Internal Server Error");
+      }
+
+      if (result.length > 0) {
+        res.status(200).send("Mail is used");
+      } else {
+        res.status(200).send("Valid Mail");
+      }
+    }
+  );
+});
+
+router.post("/api/write_review/:id", (req, res, next) => {
+  const product_id = req.params.id;
+  const user_id = req.user.id;
+  const review_content = req.body.review;
+  console.log(product_id, user_id, review_content);
   connection.query(
     "CALL Add_Review(?, ?, ?)",
-    [req.user.id, req.params.id, req.body.review],
+    [user_id, product_id, review_content],
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        res.send(result);
+        connection.query(
+          "SELECT * FROM Review WHERE Review.product_id = ?", [1],
+          (err, results) => {
+            if (err) {
+              console.log(err);
+            }
+            console.log(results);
+            res.status(200).send(results);
+          }
+        );
       }
     }
   );
+});
+
+router.get("/api/product_reviews/:id", function (req, res, next) {
+  const id = req.params.id;
+  connection.query("SELECT * FROM Review WHERE Review.product_id = ?"),
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+      }
+      if (result.length > 0) {
+        res.status(200).send(result);
+        res.json(result);
+      } else {
+        res.status(200).send("This product doesn't have any preview");
+      }
+    };
 });
 
 module.exports = router;
