@@ -6,36 +6,29 @@
             <div class="col-md-6 col-sm-6" id="updateForm">
                 <h3>Your Personal Details</h3>
                 <div class="form-group">
-                    <label for="firstname">First Name <span class="require">*</span></label>
+                    <label for="firstname">First Name <span
+                            class="require">*</span></label>
                     <input type="text" id="firstname" class="form-control"
                         value="{{username}}">
                 </div>
                 <div class="form-group">
-                    <label for="lastname">Last Name <span class="require">*</span></label>
+                    <label for="lastname">Last Name <span
+                            class="require">*</span></label>
                     <input type="text" id="lastname" class="form-control"
                         value="{{username}}">
                 </div>
                 <div class="form-group">
-                    <label for="email">E-Mail <span class="require">*</span></label>
+                    <label for="email">E-Mail <span
+                            class="require">*</span></label>
                     <input type="text" id="email" class="form-control"
                         value="{{email}}">
                 </div>
                 <div class="form-group">
-                    <label for="telephone">Telephone <span class="require">*</span></label>
+                    <label for="telephone">Telephone <span
+                            class="require">*</span></label>
                     <input type="text" id="telephone" class="form-control"
                         value="{{phone}}">
                 </div>
-                {{!-- <h3>Your Password</h3>
-                <div class="form-group">
-                    <label for="password">Password <span class="require">*</span></label>
-                    <input type="password" id="password" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="password-confirm">Password Confirm <span
-                            class="require">*</span></label>
-                    <input type="text" id="password-confirm"
-                        class="form-control">
-                </div> --}}
             </div>
             <div class="col-md-6 col-sm-6">
                 <h3>Your Address</h3>
@@ -49,9 +42,17 @@
                         value="{{address}}">
                 </div>
                 <div class="form-group">
-                    <label for="city">City <span class="require">*</span></label>
+                    <label for="city">City <span
+                            class="require">*</span></label>
                     <input type="text" id="city" class="form-control"
                         placeholder="Ho Chí Minh City">
+                </div>
+
+                <div class="form-group">
+                    <label for>Password<span></span></label>
+                    <a href="/auth/pass"
+                        class="btn btn-primary w-100 form-control">Update
+                        Password</a>
                 </div>
             </div>
             <button class="btn btn-primary form-control" type="button"
@@ -82,7 +83,7 @@
             };
 
             // Sử dụng Fetch API để gửi yêu cầu POST
-            fetch('/auth1/api/update', {
+            fetch('/auth/api/update', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

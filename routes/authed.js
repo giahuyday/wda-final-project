@@ -1,6 +1,8 @@
 const express = require("express");
 const { isAuth } = require("../middleware/auth");
 const router = express.Router();
+const crypto = require("crypto")
+const update_password = require("../src/auth/auth.service").update_password
 
 router.get("/my_account", isAuth, function (req, res, next) {
   console.log(req.user.id);
@@ -18,6 +20,57 @@ router.get("/my_account", isAuth, function (req, res, next) {
     }
   );
 });
+
+router.get("/pass", function(req, res, next){
+  if(req.isAuthenticated){
+    res.render("password")
+  }
+  else{
+    res.redirect("/auth/login")
+  }
+})
+
+router.post("/api/repass", function(req, res, next){
+  if(req.isAuthenticated){
+    const salt = req.user.salt
+    const userId = req.user.id
+    const password = req.body.password
+
+    console.log(req.body)
+    console.log(salt)
+    console.log(userId)
+    console.log(password)
+
+    crypto.pbkdf2(
+      password,
+      salt,
+      10000,
+      32,
+      "sha256",
+      async function (err, hashedPassword) {
+          if(err){
+              console.log(err)
+          }
+          try{
+              connection.query(
+                "UPDATE Account SET password = ? WHERE id = ?", [hashedPassword.toString("hex"), userId],
+                (err, result) => {
+                  if(err){
+                      console.error(err)
+                  }
+                  else{
+                      console.log(result)
+                  }
+                }
+                );
+          }catch (err) {
+            console.log(err);
+        }})
+  }
+  else{
+    res.redirect("/login")
+  }
+})
 
 router.post("/api/update", isAuth, function (req, res, next) {
   // res.json("Con me may");
@@ -44,4 +97,3 @@ router.post("/api/update", isAuth, function (req, res, next) {
 });
 
 module.exports = router;
-   

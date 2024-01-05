@@ -129,6 +129,11 @@ router.get("/api/username", (req, res, next) => {
   );
 });
 
+router.post("api/checkout", (req, res, next) => {
+  const data = req.body
+  console.log(data)
+})
+
 router.get("/api/email", (req, res, next) => {
   const email = req.query.email;
 

@@ -1,22 +1,26 @@
-function AddtoCart(id) {}
+const crypto = require("crypto");
+const mysql = require("mysql");
 
-function checkAvailability(param) {
-  var parameter = $("#"+param).val();
+const config = require("dotenv").config;
 
-  // Make an AJAX request to the server to check availability
-  $.ajax({
-    type: "GET",
-    url: "/auth/api/" + param, // Replace with the actual server-side script
-    data: { param: param },
-    success: function (response) {
-      console.log(response);
-      // Update the availability status based on the server response
-      $("#availability-status").html(response);
-    },
-  });
-}
+const connection = mysql.createConnection({
+  host: "db4free.net",
+  user: "wad_dbms",
+  password: "wad_dbms",
+  database: "wad_dbms",
+});
 
-function update_password(id, new_pass, salt) {
+connection.connect();
+
+// connection.query("SELECT * FROM Account", (err, res) => {
+//   if (err) {
+//     console.error(err);
+//   } else {
+//     console.log(res);
+//   }
+// });
+
+function change_pass(id, new_pass, salt) {
   crypto.pbkdf2(
     new_pass,
     salt,
@@ -44,5 +48,6 @@ function update_password(id, new_pass, salt) {
       }})
 }
 
+change_pass(2, "123123", "08795e6aa10a2fff0675ee4b5f5f5224e34494dfd5a76079a6082cf25fcee1c1")
 
-module.exports = {checkAvailability, AddtoCart, update_password}
+// connection.end();

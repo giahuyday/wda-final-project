@@ -33,16 +33,20 @@ router.get("/add_product", function (req, res, next) {
 
 router.get("/index_table", function (req, res, next) {
   if (req.isAuthenticated()) {
-    connection.query("SELECT * FROM Account WHERE id != ?", [req.user.id], (err, result, next) => {
-      if (err) {
-        res.send(err);
+    connection.query(
+      "SELECT * FROM Account WHERE id != ?",
+      [req.user.id],
+      (err, result, next) => {
+        if (err) {
+          res.send(err);
+        }
+        return res.status(200).render("admin/tables/user", {
+          title: "Admin Site",
+          layout: "admin/admin_layout",
+          data: result,
+        });
       }
-      return res.status(200).render("admin/tables/user", {
-        title: "Admin Site",
-        layout: "admin/admin_layout",
-        data: result,
-      });
-    });
+    );
   } else {
     res.json("You are not admin");
   }
@@ -54,6 +58,7 @@ router.get("/product_list", function (req, res, next) {
       if (err) {
         res.send(err);
       }
+      console.log(result)
       return res.status(200).render("admin/tables", {
         title: "Admin Site",
         layout: "admin/admin_layout",
@@ -86,4 +91,19 @@ router.get("/ban", function (req, res, next) {
   );
 });
 
+router.get("/lock_product", function (req, res, next) {
+  const id = req.query.id;
+
+  if (!id) {
+    return res.status(400).send("Missing Product ID");
+  }
+
+  connection.query("UPDATE Product SET is_deleted = 1 WHERE id = ? AND is_deleted = 0", [id], (err, result) => {
+    if(err){
+      console.log(err)
+    }else{
+      res.status(200).send("1")
+    }
+  });
+});
 module.exports = router;

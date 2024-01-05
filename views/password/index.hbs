@@ -1,0 +1,76 @@
+<div id="payment-address" class="panel panel-default">
+    <form id="payment-address-content">
+        <div class="panel-body row">
+            <div class="col-md-6 col-sm-6 mx-auto d-flex align-items-center">
+                <div>
+                    <h3>Your Password</h3>
+                    <div class="form-group">
+                        <label for="password">Password <span
+                                class="require">*</span></label>
+                        <input type="password" id="password"
+                            class="form-control"
+                            onblur="checkPasswordValid()">
+                        <p id="valid-status"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password Confirm <span
+                                class="require">*</span></label>
+                        <input type="password" id="password1"
+                            class="form-control">
+                        <label for class>update-password <span
+                                class="require">*</span></label>
+                        <button class="btn btn-primary form-control"
+                            onclick="UpdateNewPassword()" type="submit">Change
+                            Password</button>
+                    </div>
+
+                    {{!-- <div class="form-group"> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function checkPasswordValid(){
+        var password = $('#password').val();
+        console.log(password)
+        
+        $.ajax({
+            type: 'get',
+            url: '/auth/api/pass',
+            data: { password: password },
+            success: function(response){
+                console.log(response)
+                $('#valid-status').html(response)
+            }
+        });
+    }
+</script>
+
+<script>
+    function UpdateNewPassword(){
+//        var status = document.getElementById("valid-status").textContent
+        const password = document.getElementById("password1").value;
+        console.log(password)
+        //if(status == "Valid Password"){
+             fetch('/auth/api/repass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password: password }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Kiểm tra dữ liệu từ server và thực hiện chuyển hướng
+                console.log(data)
+            })
+            .catch(error => {
+                // Xử lý lỗi trong quá trình gửi request hoặc nhận phản hồi
+                console.log('Lỗi khi gửi request:', error);
+            });
+        }
+    //}
+</script>
