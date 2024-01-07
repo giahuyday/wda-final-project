@@ -130,9 +130,30 @@ router.get("/api/username", (req, res, next) => {
 });
 
 router.post("api/checkout", (req, res, next) => {
-  const data = req.body
-  console.log(data)
-})
+  const username = req.body.username;
+
+  // Kiểm tra xem username có được cung cấp không
+  if (!username) {
+    return res.status(400).send("Missing username parameter");
+  }
+
+  connection.query(
+    "SELECT username FROM Account WHERE username = ?",
+    [username],
+    (err, result) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).send("Internal Server Error");
+      }
+
+      if (result.length > 0) {
+        res.status(200).send("Username is used");
+      } else {
+        res.status(200).send("Valid Username");
+      }
+    }
+  );
+});
 
 router.get("/api/email", (req, res, next) => {
   const email = req.query.email;
@@ -173,7 +194,8 @@ router.post("/api/write_review/:id", (req, res, next) => {
         console.log(err);
       } else {
         connection.query(
-          "SELECT * FROM Review WHERE Review.product_id = ?", [1],
+          "SELECT * FROM Review WHERE Review.product_id = ?",
+          [1],
           (err, results) => {
             if (err) {
               console.log(err);

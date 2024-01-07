@@ -1,0 +1,66 @@
+<div class="table-responsive">
+    <div class="product-page-options">
+        <div class="pull-left">
+            <label class="control-label">Sorted</label>
+            <a
+                href="/auth/my_ordered?sorted=decrease">Decrease</a>
+        </div>
+        <div class="pull-left">
+            <label for="" class="control-label">Sorted</label>
+            <a href="/auth/my_ordered?sorted=status">Status</a>
+        </div>
+    </div>
+    <table class="table table-bordered" id="dataTable"
+        width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <td>Order_ID</td>
+                {{!-- <th>Name</th> --}}
+                <th>username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                {{!-- <th>Role</th> --}}
+                <th>Address</th>
+                <th>Name</th>
+                <th>Created at</th>
+                <th>Status</th>
+                {{!-- <th>Ban_Status</th> --}}
+                {{!-- <th>Ban User</th> --}}
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td>Order_ID</td>
+                {{!-- <th>Name</th> --}}
+                <th>username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                {{!-- <th>Role</th> --}}
+                <th>Address</th>
+                <th>Name</th>
+                <th>Created at</th>
+                <td>Status</td>
+                {{!-- <th>Ban_Status</th> --}}
+                {{!-- <th>Ban User</th> --}}
+            </tr>
+        </tfoot>
+        <tbody>
+            {{#each data}}
+            <tr>
+                <td id="id">{{id}}</td>
+                <td id="username">{{account_id}}</td>
+                <td id="email">{{user.email}}</td>
+                <td id="phone">{{user.phone}}</td>
+                <td class="address">{{user.address}}</td>
+                <td id="address">{{name}}</td>
+                <td id="created_at">{{created_at}}</td>
+                <th class="status">{{order_status}}</th>
+                {{!-- <td>
+                    <button class="btn btn-dark w-100"
+                        onclick="Ban({{id}})">Ban</button>
+                </td> --}}
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

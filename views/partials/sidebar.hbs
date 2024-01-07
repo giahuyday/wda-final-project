@@ -7,6 +7,23 @@
     </li>
   </ul>
 </div>
+<div class="sidebar-filter margin-bottom-25">
+  <select name id="fitlter-price" class="form-control">
+    <option value="lowest">Lowest Price</option>
+    <option value="highest">Hightest Price</option>
+  </select>
+  <button type="button" id="search-button" class="btn-primary btn form-control">Search</button>
+</div>
+
+<script>
+        document.getElementById("search-button").addEventListener("click", function() {
+            // Lấy giá trị được chọn từ select
+            var selectedValue = document.getElementById("fitlter-price").value;
+
+            // Tạo URL dựa trên giá trị được chọn và chuyển hướng trang
+            window.location.href = "/?price=" + selectedValue;
+        });
+    </script>
 
 <script>
     fetch('/category', {

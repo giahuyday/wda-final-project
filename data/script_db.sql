@@ -64,7 +64,7 @@ CREATE TABLE __Order (
     account_id INT,
     product_id INT,
     quantity INT,
-    order_status NVARCHAR(255),
+    order_status INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );

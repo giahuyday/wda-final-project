@@ -71,95 +71,54 @@
 
     <div class="form-group text-center">
         <button type="button" class="btn btn-primary"
-            onclick="submitOrder({{json data}})">Đặt hàng</button>
+            onclick="updateProfile()">Đặt hàng</button>
     </div>
 </div>
 
-<script>
-    function submitOrder(data) {
-        // Lấy thông tin từ form và sản phẩm
-        const formData = new FormData(document.getElementById('checkoutForm'));
-        console.log(formData)
-        //const products = Object.values(data);
+ <script>
+    function updateProfile() {
+        // Lấy giá trị từ các trường input thông tin cá nhân
+        var address = document.getElementById('address').value;
+        var phone = document.getElementById('phone').value;
+        var email = document.getElementById('email').value;
 
-// Thêm thông tin sản phẩm vào formData
-products.forEach(product => {
-    formData.append('products[]', JSON.stringify(product));
-});
+        // Lấy danh sách sản phẩm từ input số lượng
+        var productList = [];
+        var quantityInputs = document.querySelectorAll('.quantity-input');
+        quantityInputs.forEach(function (input) {
+            var productId = input.getAttribute('data-product-id');
+            var quantity = input.value;
+            productList.push({ "product_id": productId, "quantity": quantity });
+        });
 
-    // Gửi yêu cầu POST đến API checkout
-    fetch('/auth/api/checkout', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.json())
+        // Tạo đối tượng chứa dữ liệu để gửi đến API
+        var data = {
+            address: address,
+            phone: phone,
+            email: email,
+            cart_data: productList
+        };
+
+        console.log(data)
+
+        // Sử dụng Fetch API để gửi yêu cầu POST
+        fetch('/auth/api/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            return response.json();
+        })
         .then(data => {
-            // Xử lý kết quả từ API nếu cần
+            // Xử lý kết quả trả về từ API (nếu có)
             console.log(data);
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.log('Fetch error:', error);
         });
-    };
-
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Cập nhật tổng giá trị của tất cả sản phẩm và phí vận chuyển khi trang được load
-        updateGrandTotal();
-
-        // Gắn sự kiện cho các input số lượng để cập nhật tổng giá trị khi người dùng thay đổi số lượng
-        var quantityInputs = document.querySelectorAll('.quantity-input');
-        quantityInputs.forEach(function (input) {
-            input.addEventListener('input', function () {
-                updateTotalPrice(input);
-            });
-        });
-    });
-    // Hàm cập nhật tổng giá trị cho sản phẩm cụ thể
-    function updateTotalPrice(input) {
-        // Lấy các phần tử DOM liên quan đến sản phẩm cụ thể
-        var row = input.closest('tr');
-        var unitPriceElement = row.querySelector('.unit-price');
-        var totalPriceElement = row.querySelector('.total-price');
-
-        // Lấy giá trị số lượng mới từ input
-        var quantity = input.value;
-
-        // Lấy giá trị đơn giá từ DOM
-        var unitPrice = parseFloat(unitPriceElement.innerText.replace("$", ""));
-
-        // Tính tổng giá trị mới
-        var totalPrice = unitPrice * quantity;
-
-        // Cập nhật tổng giá trị của sản phẩm vào DOM
-        totalPriceElement.innerText = "$" + totalPrice.toFixed(0);
-
-        // Cập nhật tổng giá trị của tất cả sản phẩm và phí vận chuyển
-        updateGrandTotal();
-    }
-
-    // Hàm cập nhật tổng giá trị của tất cả sản phẩm và phí vận chuyển
-    function updateGrandTotal() {
-        // Lấy tất cả các phần tử total-price trong bảng
-        var totalElements = document.querySelectorAll('.total-price');
-
-        // Tính tổng giá trị của tất cả sản phẩm
-        var grandTotal = Array.from(totalElements).reduce(function (sum, element) {
-            var price = parseFloat(element.innerText.replace("$", ""));
-            return sum + price;
-        }, 0);
-
-        // Phí vận chuyển mặc định
-        var shippingFee = 5.00;
-
-        // Tổng giá trị kết hợp phí vận chuyển
-        var totalWithShipping = grandTotal + shippingFee;
-
-        // Hiển thị tổng giá trị và phí vận chuyển mới trong phần tử có class là "shopping-total"
-        document.querySelector('.shopping-total li.em-subtotal strong.price').innerText = "$" + grandTotal.toFixed(0);
-        document.querySelector('.shopping-total li.em-shipping strong.price').innerText = "$" + shippingFee.toFixed(0);
-        document.querySelector('.shopping-total li.shopping-total-price strong.price').innerText = "$" + totalWithShipping.toFixed(0);
     }
 </script>
+        
