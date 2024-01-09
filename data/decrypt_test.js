@@ -64,8 +64,8 @@ function validPassword(password, hash, salt) {
 //46cb75ccd2108aafe339def715d9618d0b2b4c720f6de5f853004c550607dd65
 
 const isValid = validPassword(
-  "",
-  "8d0104dcabafaa4ae7fe1b65352387317e68f0179e217f59d374e61226fd54df",
+  "admin",
+  "46cb75ccd2108aafe339def715d9618d0b2b4c720f6de5f853004c550607dd65",
   "08795e6aa10a2fff0675ee4b5f5f5224e34494dfd5a76079a6082cf25fcee1c1"
 );
 
