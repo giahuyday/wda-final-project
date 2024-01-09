@@ -60,13 +60,23 @@ CREATE TABLE Review (
 )
 
 CREATE TABLE __Order (
-    id INT,
+    id INT AUTO_INCREMENT,
     account_id INT,
-    product_id INT,
-    quantity INT,
+    address NVARCHAR(255),
+    phone NVARCHAR(10),
+    email VARCHAR(50),
     order_status INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
+);
+
+CREATE TABLE OrderItems (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT,
+  product_id INT,
+  quantity INT,
+  FOREIGN KEY (order_id) REFERENCES Orders(id),
+  FOREIGN KEY (product_id) REFERENCES Products(id)
 );
 
 ALTER TABLE Product
@@ -92,6 +102,10 @@ FOREIGN KEY (product_id) REFERENCES Product(id)
 ALTER TABLE __Order
 ADD CONSTRAINT fk_Order_Product
 FOREIGN KEY  (product_id) REFERENCES Product(id);
+
+ALTER TABLE __Order
+ADD CONSTRAINT fk_Order_Account
+FOREIGN KEY  (account_id) REFERENCES Account(id);
 
 ALTER TABLE Review
 ADD CONSTRAINT fk_Review_Account

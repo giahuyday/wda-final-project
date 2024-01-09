@@ -129,32 +129,61 @@ router.get("/api/username", (req, res, next) => {
   );
 });
 
-router.post("api/checkout", (req, res, next) => {
-  const username = req.body.username;
+router.post("/api/checkout", (req, res, next) => {
+  const { address, phone, email, cart_data } = req.body;
 
-  // Kiểm tra xem username có được cung cấp không
-  if (!username) {
-    return res.status(400).send("Missing username parameter");
+  // Kiểm tra xem các thông tin cần thiết có được cung cấp không
+  if (!address || !phone || !email || !cart_data || cart_data.length === 0) {
+    return res.status(400).json({ error: "Missing or invalid parameters" });
   }
 
+  // Thực hiện các bước xử lý đơn đặt hàng ở đây
+  // Ví dụ: Lưu đơn hàng vào cơ sở dữ liệu, gửi email xác nhận, ...
+
+  // Sau khi xử lý thành công, trả về thông báo và thông tin đơn hàng
+  const orderInfo = {
+    address: address,
+    phone: phone,
+    email: email,
+    cart_data: cart_data,
+  };
+  
   connection.query(
-    "SELECT username FROM Account WHERE username = ?",
-    [username],
+    "INSERT INTO __Order (account_id, address, phone, email) VALUES (?, ?, ?, ?)",
+    [req.user.id, address, phone, email],
     (err, result) => {
       if (err) {
-        console.error("Database error:", err);
-        return res.status(500).send("Internal Server Error");
+        console.log(err);
+        // Handle the error accordingly (e.g., return an error response)
+        return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      if (result.length > 0) {
-        res.status(200).send("Username is used");
-      } else {
-        res.status(200).send("Valid Username");
-      }
+      const orderId = result.insertId;
+
+      // Lặp qua danh sách sản phẩm trong đơn hàng và chèn vào bảng OrderItems
+      const itemsSql =
+        "INSERT INTO OrderItems (order_id, product_id, quantity) VALUES (?, ?, ?)";
+      cart_data.forEach((item) => {
+        connection.query(
+          itemsSql,
+          [orderId, item.product_id, item.quantity],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+              // Handle the error accordingly (e.g., return an error response)
+              return res.status(500).json({ error: "Internal Server Error" });
+            }
+          }
+        );
+      });
+
+      // Trả về thông báo và thông tin đơn hàng
+      res
+        .status(200)
+        .json({ success: "Order placed successfully", orderInfo: orderInfo });
     }
   );
 });
-
 router.get("/api/email", (req, res, next) => {
   const email = req.query.email;
 

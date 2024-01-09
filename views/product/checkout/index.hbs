@@ -75,19 +75,19 @@
     </div>
 </div>
 
- <script>
+<script>
     function updateProfile() {
         // Lấy giá trị từ các trường input thông tin cá nhân
         var address = document.getElementById('address').value;
         var phone = document.getElementById('phone').value;
         var email = document.getElementById('email').value;
 
-        // Lấy danh sách sản phẩm từ input số lượng
+        // Lấy danh sách sản phẩm từ bảng
         var productList = [];
-        var quantityInputs = document.querySelectorAll('.quantity-input');
-        quantityInputs.forEach(function (input) {
-            var productId = input.getAttribute('data-product-id');
-            var quantity = input.value;
+        var productRows = document.querySelectorAll('.table-wrapper-responsive table tr');
+        productRows.forEach(function (row) {
+            var productId = row.querySelector('.goods-page-ref-no').innerText;
+            var quantity = row.querySelector('.goods-page-quantity input').value;
             productList.push({ "product_id": productId, "quantity": quantity });
         });
 
@@ -98,8 +98,6 @@
             email: email,
             cart_data: productList
         };
-
-        console.log(data)
 
         // Sử dụng Fetch API để gửi yêu cầu POST
         fetch('/auth/api/checkout', {
@@ -121,4 +119,3 @@
         });
     }
 </script>
-        
