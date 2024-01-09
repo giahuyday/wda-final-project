@@ -7,13 +7,13 @@ var passport = require("passport");
 const session = require("express-session");
 const hbs = require("express-handlebars");
 const MySQLStore = require("express-mysql-session")(session);
-const isAdmin = require("./middleware/auth").isAdmin;
-const isAuth = require("./middleware/auth").isAuth;
+// const isAdmin = require("./middleware/auth").isAdmin;
+// const isAuth = require("./middleware/auth").isAuth;
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const adminRouter = require("./routes/admin");
-const productRouter = require("./routes/product");
-const authUser = require("./routes/authed");
+const usersRouter = require("./routes/user/users");
+const adminRouter = require("./routes/admin/admin");
+const productRouter = require("./routes/product/product");
+const authUser = require("./routes/user/authed");
 
 const app = express();
 

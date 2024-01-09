@@ -22,7 +22,8 @@ router.get("/", function (req, res, next) {
         });
       }
     );
-  } else if (price === "highest") {
+  } 
+  else if (price === "highest") {
     connection.query(
       "SELECT * FROM Product, Image WHERE Product.id = Image.product_id ORDER BY Product.price DESC",
       (error, results) => {
@@ -43,7 +44,7 @@ router.get("/", function (req, res, next) {
   }
   else{
     connection.query(
-      "SELECT * FROM Product, Image WHERE Product.id = Image.product_id",
+      "SELECT Product.*, MAX(Image.id) AS image_id, Image.urls FROM Product LEFT JOIN Image ON Product.id = Image.product_id GROUP BY Product.id, Image.urls",
       (error, results) => {
         console.log(results);
         if (error) {
