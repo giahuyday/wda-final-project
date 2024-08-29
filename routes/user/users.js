@@ -29,6 +29,7 @@ router.post("/api/login", (req, res, next) => {
     }
 
     req.logIn(user, (err) => {
+      console.log(user);
       if (err) {
         console.error(err);
         return next(err);
@@ -76,7 +77,9 @@ router.post("/api/register", function (req, res, next) {
       try {
         // Tạo mới user trong MongoDB
         connection.query(
-          `CALL AddAccount(?, ?, ?, ?, ?, ?, ?)`,
+          `
+            INSERT INTO Account (username, password, name, email, phone, address, salt)
+            VALUES (?, ?, ?, ?, ?, ?, ?);`,
           [
             req.body.username,
             hashedPassword.toString("hex"),
@@ -147,7 +150,7 @@ router.post("/api/checkout", (req, res, next) => {
     email: email,
     cart_data: cart_data,
   };
-  
+
   connection.query(
     "INSERT INTO __Order (account_id, address, phone, email) VALUES (?, ?, ?, ?)",
     [req.user.id, address, phone, email],
