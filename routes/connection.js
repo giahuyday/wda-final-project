@@ -1,17 +1,12 @@
-const mysql = require("mysql");
-require("dotenv").config();
+const mysql = require('mysql2');
 
-module.exports = connection = mysql.createConnection({
-  host: "db4free.net",
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DB,
+const connection = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '123456',
+  database: 'wad_dbms',
 });
 
-connection.connect((error) => {
-  if (error) {
-    console.error("Lỗi kết nối đến cơ sở dữ liệu:", error);
-    return;
-  }
-  console.log("Đã kết nối thành công đến cơ sở dữ liệu MySQL");
-});
+const promiseConnection = connection.promise(); // Convert to promise-based
+
+module.exports = promiseConnection;

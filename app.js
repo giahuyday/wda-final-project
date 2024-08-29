@@ -14,6 +14,7 @@ const usersRouter = require("./routes/user/users");
 const adminRouter = require("./routes/admin/admin");
 const productRouter = require("./routes/product/product");
 const authUser = require("./routes/user/authed");
+const promiseConnection = require("./routes/connection");
 
 const app = express();
 
@@ -50,7 +51,7 @@ const sessionStore = new MySQLStore(
       },
     },
   },
-  connection
+  promiseConnection
 );
 
 app.use(
