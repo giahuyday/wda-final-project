@@ -14,6 +14,7 @@ const usersRouter = require("./routes/user/users");
 const adminRouter = require("./routes/admin/admin");
 const productRouter = require("./routes/product/product");
 const authUser = require("./routes/user/authed");
+const promiseConnection = require("./routes/connection");
 
 const app = express();
 
@@ -50,14 +51,14 @@ const sessionStore = new MySQLStore(
       },
     },
   },
-  connection
+  promiseConnection
 );
 
 app.use(
   session({
     saveUninitialized: false,
     resave: false,
-    secret: process.env.SECRET,
+    secret: "giahuyday",
     cookie: {
       maxAge: 1000 * 20 * 60, // 10s
     },

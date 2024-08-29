@@ -1,5 +1,7 @@
 const connection = require("../connection");
 const express = require("express");
+const categoryController = require("../../src/category/category.controller");
+const productController = require("../../src/product/product.controller");
 const router = express.Router();
 
 router.get("/product-detail/:id", function (req, res, next) {
@@ -52,67 +54,9 @@ router.get("/filter/:category", function (req, res) {
   );
 });
 
-router.post("/api/create_product", function (req, res, next) {
-  console.log(req.body);
-  const name = req.body.name;
-  const description = req.body.description;
-  const price = req.body.price;
-  const quantity = req.body.quantity;
-  const category = req.body.category;
-  const urls = req.body.urls;
-
-  const urlss = urls.split(',');
-  console.log(urlss);
-
-  connection.query(
-    `CALL AddProduct(?,?,?,?,?)`,
-    [name, price, description, category, quantity],
-    (error, results, fields) => {
-      if (error) {
-        console.error("Error calling the stored procedure:", error);
-        res.render("Error calling the stoer procedure");
-        return;
-      }
-      const result = Object.values(results[0][0])[0];
-      if (result === 0) {
-        console.log("Category or producer is wrong.");
-        res.send("Category or producer is wrong.");
-      } else {
-        console.log("New Item created. New id is: ", result);
-
-        // Sử dụng Promise để xử lý nhiều lời gọi truy vấn đồng thời
-        const promises = urlss.map((url) => {
-          return new Promise((resolve, reject) => {
-            connection.query(
-              "CALL Add_ProductPicture(?,?)",
-              [result, url],
-              (err, result) => {
-                if (err) {
-                  console.log(err);
-                  reject(err);
-                } else {
-                  console.log(`Inserted picture for product id ${result}`);
-                  resolve(result);
-                }
-              }
-            );
-          });
-        });
-
-        // Chờ tất cả các promises hoàn thành trước khi gửi phản hồi
-        Promise.all(promises)
-          .then((results) => {
-            res.send(results);
-          })
-          .catch((error) => {
-            console.log(error);
-            res.send(error);
-          });
-      }
-    }
-  );
-});
-
+router.post("/api/create_product", productController.createProduct);
+router.post("/api/update_product", productController.updateProduct);
+router.post("/api/delete_product", productController.deleteProduct);
 
 router.get("/cart", function (req, res, next) {
   if (req.user) {
@@ -203,5 +147,9 @@ router.get("/api/filterproduct", function (req, res) {
 
   // Trả về danh sách sản phẩm đã lọc
 });
+
+router.post("/api/create_category", categoryController.createCategory);
+router.post("/api/update_category", categoryController.updateCategory);
+router.post("/api/delete_category", categoryController.deleteCategory);
 
 module.exports = router;

@@ -34,7 +34,7 @@ router.get("/add_product", function (req, res, next) {
 router.get("/index_table", function (req, res, next) {
   if (req.isAuthenticated()) {
     connection.query(
-      "SELECT * FROM Account WHERE id != ?",
+      "SELECT * FROM user WHERE id != ?",
       [req.user.id],
       (err, result, next) => {
         if (err) {
@@ -54,7 +54,7 @@ router.get("/index_table", function (req, res, next) {
 
 router.get("/product_list", function (req, res, next) {
   if (req.isAuthenticated()) {
-    connection.query("SELECT * FROM Product", (err, result, next) => {
+    connection.query("SELECT * FROM product", (err, result, next) => {
       if (err) {
         res.send(err);
       }
@@ -79,7 +79,7 @@ router.get("/ban", function (req, res, next) {
   }
 
   connection.query(
-    "UPDATE Account SET is_activated = 0 WHERE id = ?",
+    "UPDATE user SET is_activated = 0 WHERE id = ?",
     [id],
     (err, result) => {
       if (err) {

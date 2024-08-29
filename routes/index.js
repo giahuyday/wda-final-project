@@ -44,7 +44,7 @@ router.get("/", function (req, res, next) {
   }
   else{
     connection.query(
-      "SELECT Product.*, MAX(Image.id) AS image_id, Image.urls FROM Product LEFT JOIN Image ON Product.id = Image.product_id GROUP BY Product.id, Image.urls",
+      "SELECT Product.* FROM product",
       (error, results) => {
         console.log(results);
         if (error) {
