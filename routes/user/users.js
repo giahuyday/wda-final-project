@@ -3,9 +3,11 @@ const router = express.Router();
 require("dotenv").config;
 require("../../middleware/passport");
 const promiseConnection = require("../connection");
+const userControllers = require("../../src/user/user.controller");
 const crypto = require("crypto");
 require("../../middleware/passport");
 var passport = require("passport");
+const { isAuth } = require("../../middleware/auth");
 
 router.get("/login", function (req, res, next) {
   if (req.isAuthenticated()) {
@@ -21,23 +23,20 @@ router.post("/api/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       console.error(err);
+      res.json("Login failed");
       // return next(err);
     }
 
     if (!user) {
-      console.log("Authentication failed:", info.message);
-      res.redirect("/login");
+      // console.log("Authentication failed:", info.message);
+      res.status(404).json("user not found");
     }
 
-    req.logIn(user, (err) => {
-      console.log(user);
+    req.logIn(user, function (err) {
       if (err) {
-        console.error(err);
         return next(err);
       }
-
-      console.log("Authentication successful:", user.user_name);
-      res.json("success"); // Thêm return ở đây
+      return res.redirect("/auth/my_account");
     });
   })(req, res, next); // Thêm () ở đây để gọi hàm authenticate
 });
@@ -63,6 +62,8 @@ router.post("/api/logout", (req, res, next) => {
   });
 });
 
+router.post("/api/change_password", isAuth, userControllers.changePassword);
+
 router.post("/api/register", function (req, res, next) {
   const salt = crypto.randomBytes(32).toString("hex");
   console.log(req.body);
@@ -81,7 +82,7 @@ router.post("/api/register", function (req, res, next) {
         // Tạo mới user trong MongoDB
         const [rows, fields] = await promiseConnection.query(
           `
-            INSERT INTO user (user_name, user_password, user_mail, phone, _useraddress, salt)
+            INSERT INTO user (user_name, user_password, user_mail, phone, user_address, salt)
             VALUES (?, ?, ?, ?, ?, ?);`,
           [
             req.body.user_name,

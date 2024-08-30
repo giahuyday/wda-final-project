@@ -33,11 +33,12 @@ const verifyCallback = async (user_name, password, cb) => {
       user[0].user_password,
       user[0].salt
     );
-
     if (isValid) {
       return cb(null, user);
     } else {
-      return cb(null, false);
+      return cb(null, false, {
+        message: "Password is wrong",
+      });
     }
   } catch (err) {
     console.log(err);
