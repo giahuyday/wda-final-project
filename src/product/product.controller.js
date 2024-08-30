@@ -29,6 +29,19 @@ const getProduct = async (req, res) => {
   }
 };
 
+const getProducts = async (req, res) => {
+  try {
+    const products = await productServices.getProducts();
+
+    res.render("index", {
+      data: products,
+      title: "Home Page",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const getProductByCategory = async (req, res) => {
   try {
     var products = await productServices.getProductByCategory(
@@ -75,6 +88,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   createProduct,
   getProduct,
+  getProducts,
   getProductByCategory,
   updateProduct,
   deleteProduct,

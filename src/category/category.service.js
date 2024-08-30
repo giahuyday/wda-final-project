@@ -22,6 +22,14 @@ const getCategory = async (category_id) => {
     "SELECT * FROM category WHERE category.id = ?",
     [category_id]
   );
+  console.log(rows);
+  return rows;
+};
+
+const getCategories = async () => {
+  const [rows, fields] = await promiseConnection.query(
+    "SELECT * FROM category ORDER BY created_at DESC"
+  );
 
   return rows;
 };
@@ -60,6 +68,7 @@ const updateCategory = async (id, category) => {
 module.exports = {
   createCategory,
   getCategory,
+  getCategories,
   deleteCategory,
   updateCategory,
 };

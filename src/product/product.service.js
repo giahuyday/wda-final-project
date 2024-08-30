@@ -64,6 +64,14 @@ const getProduct = async (productId) => {
     });
 };
 
+const getProducts = async () => {
+  const [rows, fields] = await promiseConnection.query(
+    "SELECT * FROM product ORDER BY created_at DESC"
+  );
+
+  return rows;
+};
+
 const updateProduct = async (productId, updatedProduct) => {
   try {
     const [result] = await promiseConnection.query(
@@ -136,6 +144,7 @@ const getProductByCategory = async (cate_id) => {
 module.exports = {
   createProduct,
   getProduct,
+  getProducts,
   getProductByCategory,
   updateProduct,
   deleteProduct,
