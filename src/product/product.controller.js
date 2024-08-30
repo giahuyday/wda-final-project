@@ -16,6 +16,36 @@ const createProduct = async (req, res) => {
   }
 };
 
+const getProduct = async (req, res) => {
+  try {
+    var product = await productServices.getProduct(req.params);
+
+    if (product.err) {
+      return res.status(500).json(product);
+    }
+    return res.status(200).json(product);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const getProductByCategory = async (req, res) => {
+  try {
+    var products = await productServices.getProductByCategory(
+      req.body.category_id
+    );
+    if (products) {
+      return res.status(200).json(products);
+    } else {
+      return res
+        .status(404)
+        .json({ message: "not found any product with category" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const updateProduct = async (req, res) => {
   try {
     var product = await productServices.updateProduct(req.body.id, req.body);
@@ -44,6 +74,8 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   createProduct,
+  getProduct,
+  getProductByCategory,
   updateProduct,
   deleteProduct,
 };

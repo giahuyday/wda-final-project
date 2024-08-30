@@ -44,6 +44,26 @@ const createProduct = async (product) => {
   }
 };
 
+const getProduct = async (productId) => {
+  await promiseConnection
+    .query(
+      "SELECT * FROM product WHERE product.id = ?",
+      [productId],
+      (err, result) => {
+        if (err) {
+          res.render(err);
+          res.send("Failed !");
+        } else {
+          console.log(result);
+          res.render("product", { data: result });
+        }
+      }
+    )
+    .catch((err) => {
+      return { error: err };
+    });
+};
+
 const updateProduct = async (productId, updatedProduct) => {
   try {
     const [result] = await promiseConnection.query(
@@ -104,8 +124,19 @@ const deleteProduct = async (product) => {
   }
 };
 
+const getProductByCategory = async (cate_id) => {
+  const [rows, fields] = await promiseConnection.query(
+    "SELECT * FROM product WHERE product.cate_id = ?",
+    [cate_id]
+  );
+
+  return rows;
+};
+
 module.exports = {
   createProduct,
+  getProduct,
+  getProductByCategory,
   updateProduct,
   deleteProduct,
 };

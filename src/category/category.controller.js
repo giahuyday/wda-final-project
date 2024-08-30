@@ -14,6 +14,19 @@ const createCategory = async (req, res) => {
   }
 };
 
+const getCategory = async (req, res) => {
+  try {
+    const categories = await categoryService.getCategory(req.body.category_id);
+    if (categories.error) {
+      return res.status(500).json(categories);
+    }
+
+    return res.status(200).json(categories);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const updateCategory = async (req, res) => {
   try {
     const category = await categoryService.updateCategory(
@@ -47,6 +60,7 @@ const deleteCategory = async (req, res) => {
 
 module.exports = {
   createCategory,
+  getCategory,
   updateCategory,
   deleteCategory,
 };
