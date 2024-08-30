@@ -11,47 +11,66 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div
+                                class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome
+                                        <h1
+                                            class="h4 text-gray-900 mb-4">Welcome
                                             Back!</h1>
                                     </div>
                                     <form class="user" id="loginForm">
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" id="username"
-                                                aria-describedby="emailHelp" placeholder="Enter Email Address..."/>
+                                            <input type="text"
+                                                class="form-control form-control-user"
+                                                id="username"
+                                                aria-describedby="emailHelp"
+                                                placeholder="Enter Email Address..." />
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" id="password"
-                                                placeholder="Password"/>
+                                            <input type="password"
+                                                class="form-control form-control-user"
+                                                id="password"
+                                                placeholder="Password" />
                                         </div>
                                         <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
+                                            <div
+                                                class="custom-control custom-checkbox small">
+                                                <input type="checkbox"
+                                                    class="custom-control-input"
+                                                    id="customCheck">
+                                                <label
+                                                    class="custom-control-label"
+                                                    for="customCheck">Remember
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <button class="btn btn-primary btn-user btn-block" type="submit">Login</button>
+                                        <button
+                                            class="btn btn-primary btn-user btn-block"
+                                            type="submit">Login</button>
                                         <hr>
-                                        {{!-- <a href="index.html" class="btn btn-google btn-user btn-block">
+                                        {{!-- <a href="index.html"
+                                            class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i>
                                             Login with Google
                                         </a>
-                                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                            <i class="fab fa-facebook-f fa-fw"></i>
+                                        <a href="index.html"
+                                            class="btn btn-facebook btn-user btn-block">
+                                            <i
+                                                class="fab fa-facebook-f fa-fw"></i>
                                             Login with Facebook
                                         </a> --}}
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot
+                                        <a class="small"
+                                            href="forgot-password.html">Forgot
                                             Password?</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="/auth/signup">Create an
+                                        <a class="small"
+                                            href="/auth/signup">Create an
                                             Account!</a>
                                     </div>
                                 </div>
@@ -65,35 +84,28 @@
         </div>
 
     </div>
-    
-        <script>
+
+    <script>
         document.getElementById('loginForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Ngăn chặn form tự động submit
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            console.log(username, password)
             fetch('/auth/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username: username, password: password }),
+                body: JSON.stringify({ user_name: username, user_password: password }),
             })
-            .then(response => response.json())
-            .then(data => {
-                // Kiểm tra dữ liệu từ server và thực hiện chuyển hướng
-                console.log(data)
-                    window.location.href = '/admin/index'; // Thay '/dashboard' bằng URL mong muốn
+            .then((response) => {
+                console.log(response.json())
             })
-            .catch(error => {
-                // Xử lý lỗi trong quá trình gửi request hoặc nhận phản hồi
-                console.log('Lỗi khi gửi request:', error);
-            });
         });
     </script>
 
-
-    <!-- Bootstrap core JavaScript-->
+    {{!-- <!-- Bootstrap core JavaScript-->
     <script src="../admin/vendor/jquery/jquery.min.js"></script>
     <script src="../admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -101,4 +113,4 @@
     <script src="../admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../admin/js/sb-admin-2.min.js"></script>
+    <script src="../admin/js/sb-admin-2.min.js"></script> --}}

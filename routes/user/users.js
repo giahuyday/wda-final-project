@@ -2,22 +2,22 @@ const express = require("express");
 const router = express.Router();
 require("dotenv").config;
 require("../../middleware/passport");
-const connection = require("../connection");
+const promiseConnection = require("../connection");
 const crypto = require("crypto");
 require("../../middleware/passport");
 var passport = require("passport");
-const isAuth = require("../../middleware/auth").isAuth;
 
 router.get("/login", function (req, res, next) {
   if (req.isAuthenticated()) {
-    res.json("You are logged in");
+    res.send(
+      "<h1>Cannnot access site at this time because you are logged in</h1>"
+    );
   } else {
     res.render("login", { title: "Login" });
   }
 });
 
 router.post("/api/login", (req, res, next) => {
-  console.log(req.body)
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       console.error(err);
@@ -44,7 +44,9 @@ router.post("/api/login", (req, res, next) => {
 
 router.get("/signup", function (req, res, next) {
   if (req.isAuthenticated()) {
-    res.json("You are logged in and Cannot Register");
+    res.send(
+      "<h1>Cannnot access site at this time because you are logged in</h1>"
+    );
   } else {
     res.render("signup", { title: "SignUp" });
   }
@@ -77,7 +79,7 @@ router.post("/api/register", function (req, res, next) {
 
       try {
         // Tạo mới user trong MongoDB
-        connection.query(
+        const [rows, fields] = await promiseConnection.query(
           `
             INSERT INTO user (user_name, user_password, user_mail, phone, _useraddress, salt)
             VALUES (?, ?, ?, ?, ?, ?);`,
@@ -88,16 +90,10 @@ router.post("/api/register", function (req, res, next) {
             "",
             "",
             salt.toString("hex"),
-          ],
-          (err, result) => {
-            if (err) {
-              console.log(err);
-              return res.json(err); // Return to prevent further execution
-            }
-
-            res.redirect("/login");
-          }
+          ]
         );
+
+        res.redirect("/login");
       } catch (err) {
         console.log(err);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -114,8 +110,8 @@ router.get("/api/username", (req, res, next) => {
     return res.status(400).send("Missing username parameter");
   }
 
-  connection.query(
-    "SELECT username FROM Account WHERE username = ?",
+  promiseConnection.query(
+    "SELECT user_name FROM user WHERE user_name = ?",
     [username],
     (err, result) => {
       if (err) {

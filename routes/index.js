@@ -1,83 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("./connection");
+const productControllers = require("../src/product/product.controller");
+const categoryController = require("../src/category/category.controller");
+
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  const price = req.query.price;
-  if (price === "lowest") {
-    connection.query(
-      "SELECT * FROM Product, Image WHERE Product.id = Image.product_id ORDER BY Product.price ASC",
-      (error, results) => {
-        console.log(results);
-        if (error) {
-          console.error("Error querying database:", error);
-          res.status(500).send("Internal Server Error");
-          return;
-        }
+router.get("/", productControllers.getProducts);
 
-        // Render the page with data from MySQL
-        res.render("index", {
-          data: results,
-          title: "Home Page",
-        });
-      }
-    );
-  } 
-  else if (price === "highest") {
-    connection.query(
-      "SELECT * FROM Product, Image WHERE Product.id = Image.product_id ORDER BY Product.price DESC",
-      (error, results) => {
-        console.log(results);
-        if (error) {
-          console.error("Error querying database:", error);
-          res.status(500).send("Internal Server Error");
-          return;
-        }
-
-        // Render the page with data from MySQL
-        res.render("index", {
-          data: results,
-          title: "Home Page",
-        });
-      }
-    );
-  }
-  else{
-    connection.query(
-      "SELECT Product.* FROM product",
-      (error, results) => {
-        console.log(results);
-        if (error) {
-          console.error("Error querying database:", error);
-          res.status(500).send("Internal Server Error");
-          return;
-        }
-  
-        // Render the page with data from MySQL
-        res.render("index", {
-          data: results,
-          title: "Home Page",
-        });
-      }
-    );
-  }
-  // Query data from MySQL
-});
-
-
-router.get("/category", function (req, res, next) {
-  connection.query("SELECT * FROM Category", (error, results) => {
-    console.log(results);
-    if (error) {
-      console.error("Error querying database:", error);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-
-    // Render the page with data from MySQL
-    res.json({ data: results });
-  });
-});
+router.get("/category", categoryController.getCategories);
 
 router.get("/checkout", function (req, res, next) {
   if (req.user) {

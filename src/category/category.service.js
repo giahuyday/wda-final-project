@@ -17,6 +17,23 @@ const createCategory = async (category) => {
   }
 };
 
+const getCategory = async (category_id) => {
+  const [rows, fields] = await promiseConnection.query(
+    "SELECT * FROM category WHERE category.id = ?",
+    [category_id]
+  );
+  console.log(rows);
+  return rows;
+};
+
+const getCategories = async () => {
+  const [rows, fields] = await promiseConnection.query(
+    "SELECT * FROM category ORDER BY created_at DESC"
+  );
+
+  return rows;
+};
+
 const deleteCategory = async (category) => {
   try {
     const result = await promiseConnection.query(
@@ -50,6 +67,8 @@ const updateCategory = async (id, category) => {
 
 module.exports = {
   createCategory,
+  getCategory,
+  getCategories,
   deleteCategory,
   updateCategory,
 };
