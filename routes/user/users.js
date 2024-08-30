@@ -9,7 +9,7 @@ var passport = require("passport");
 
 router.get("/login", function (req, res, next) {
   if (req.isAuthenticated()) {
-    res.render(
+    res.send(
       "<h1>Cannnot access site at this time because you are logged in</h1>"
     );
   } else {
@@ -44,7 +44,7 @@ router.post("/api/login", (req, res, next) => {
 
 router.get("/signup", function (req, res, next) {
   if (req.isAuthenticated()) {
-    res.render(
+    res.send(
       "<h1>Cannnot access site at this time because you are logged in</h1>"
     );
   } else {
@@ -111,7 +111,7 @@ router.get("/api/username", (req, res, next) => {
   }
 
   promiseConnection.query(
-    "SELECT username FROM Account WHERE username = ?",
+    "SELECT user_name FROM user WHERE user_name = ?",
     [username],
     (err, result) => {
       if (err) {

@@ -2,7 +2,6 @@ const express = require("express");
 const { isAuth } = require("../../middleware/auth");
 const router = express.Router();
 const crypto = require("crypto");
-const { connect } = require("../connection");
 const update_password = require("../../src/auth/auth.service").update_password;
 const promiseConnection = require("../connection");
 
