@@ -4,31 +4,23 @@ const router = express.Router();
 const crypto = require("crypto");
 const { connect } = require("../connection");
 const update_password = require("../../src/auth/auth.service").update_password;
+const promiseConnection = require("../connection");
 
-router.get("/my_account", isAuth, function (req, res, next) {
-  console.log(req.user.id);
-  connection.query(
-    "SELECT * FROM Account WHERE id = ?",
-    [req.user.id],
-    (err, result) => {
-      if (err) {
-        res.render(err);
-        res.send("Failed !");
-      } else {
-        console.log(result);
-        res.render("auth/profile", { title: "My Profile", data: result });
-      }
-    }
+router.get("/my_account", isAuth, async function (req, res, next) {
+  const [rows, fields] = await promiseConnection.query(
+    "SELECT * FROM product WHERE id = ?",
+    [req.user]
   );
+  console.log(rows);
+  res.render("auth/profile", { title: "My Profile", data: rows });
 });
 
 router.get("/my_ordered", isAuth, function (req, res, next) {
-  console.log(req.user.id);
   const sorted = req.query.sorted;
   if (sorted === "decrease") {
     connection.query(
       "SELECT * FROM __Order, Product WHERE __Order.account_id = ? AND Product.id = __Order.product_id ORDER BY __Order.created_at DESC",
-      [req.user.id],
+      [req.user],
       (err, result) => {
         if (err) {
           res.status(err).send(err);
@@ -85,7 +77,7 @@ router.get("/pass", function (req, res, next) {
 });
 
 router.get("/api/pass", function (req, res, next) {
-  if(req.isAuthenticated){
+  if (req.isAuthenticated) {
     const id = req.user.id;
     const new_pass = req.query.password;
     console.log(id);
@@ -98,9 +90,8 @@ router.get("/api/pass", function (req, res, next) {
     } else {
       res.status(200).send("Wrong");
     }
-  }
-  else{
-    res.redirect("/login")
+  } else {
+    res.redirect("/login");
   }
 });
 
