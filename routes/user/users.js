@@ -4,6 +4,7 @@ require("dotenv").config;
 require("../../middleware/passport");
 const promiseConnection = require("../connection");
 const userControllers = require("../../src/user/user.controller");
+const passwordControllers = require("../../src/password/password.controller");
 const crypto = require("crypto");
 require("../../middleware/passport");
 var passport = require("passport");
@@ -49,7 +50,7 @@ router.post("/api/logout", (req, res, next) => {
   });
 });
 
-router.post("/api/change_password", isAuth, userControllers.changePassword);
+router.post("/api/change_password", isAuth, passwordControllers.changePassword);
 
 router.post("/api/get_user_by_name", userControllers.getUserByName);
 
