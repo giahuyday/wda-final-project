@@ -4,13 +4,9 @@ const createCategory = async (req, res) => {
   try {
     const category = await categoryService.createCategory(req.body);
 
-    if (!category) {
-      return res.status(404).json({ message: "Create category FAILED !!" });
-    }
-
-    return category;
+    return res.json(category);
   } catch (err) {
-    throw new Error(`Error creating category ${err}`);
+    console.log(err);
   }
 };
 
@@ -30,7 +26,7 @@ const getCategory = async (req, res) => {
 const getCategories = async (req, res) => {
   try {
     const categories = await categoryService.getCategories();
-    console.log(categories);
+
     return res.status(200).send(categories);
   } catch (err) {
     console.log(err);

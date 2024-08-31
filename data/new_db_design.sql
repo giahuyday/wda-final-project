@@ -38,4 +38,17 @@ CREATE TABLE product(
 
     FOREIGN KEY (user_id) REFERENCES user(id),
     FOREIGN KEY (cate_id) REFERENCES category(id)
+);
+
+CREATE TABLE CART(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    quantity INT,
+
+    is_deleted BOOLEAN DEFAULT FALSE,
+
+    created_at DATETIME DEFAULT(NOW()),
+    updated_at DATETIME DEFAULT(NOW()),
+
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (product_id) REFERENCES product(id)
 )

@@ -1,20 +1,12 @@
 const promiseConnection = require("../../routes/connection");
 
 const createCategory = async (category) => {
-  try {
-    const result = await promiseConnection.query(
-      "INSERT INTO category (cate_name, cate_description) VALUES(?, ?)",
-      [category.cate_name, date.cate_description]
-    );
+  const [rows, fields] = await promiseConnection.query(
+    "INSERT INTO category (cate_name, cate_description) VALUES(?, ?)",
+    [category.cate_name, category.cate_description]
+  );
 
-    return {
-      id: result.id,
-      cate_name: result.cate_name,
-      cate_description: result.cate_description,
-    };
-  } catch (err) {
-    console.log(err);
-  }
+  return rows[0];
 };
 
 const getCategory = async (category_id) => {
