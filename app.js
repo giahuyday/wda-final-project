@@ -7,14 +7,13 @@ var passport = require("passport");
 const session = require("express-session");
 const hbs = require("express-handlebars");
 const MySQLStore = require("express-mysql-session")(session);
-// const isAdmin = require("./middleware/auth").isAdmin;
-// const isAuth = require("./middleware/auth").isAuth;
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/user/users");
 const adminRouter = require("./routes/admin/admin");
 const productRouter = require("./routes/product/product");
 const authUser = require("./routes/user/authed");
 const promiseConnection = require("./routes/connection");
+require("dotenv").config();
 
 const app = express();
 
@@ -58,7 +57,7 @@ app.use(
   session({
     saveUninitialized: false,
     resave: false,
-    secret: "giahuyday",
+    secret: process.env.SESSION_SECRET,
     cookie: {
       maxAge: 1000 * 20 * 60, // 10s
     },

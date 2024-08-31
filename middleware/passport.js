@@ -36,6 +36,7 @@ const verifyCallback = async (user_name, password, cb) => {
       });
     }
   } catch (err) {
+    console.log(err);
     return cb(err);
   }
 };
