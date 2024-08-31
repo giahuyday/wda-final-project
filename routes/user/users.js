@@ -19,27 +19,14 @@ router.get("/login", function (req, res, next) {
   }
 });
 
-router.post("/api/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      console.error(err);
-      res.json("Login failed");
-      // return next(err);
-    }
-
-    if (!user) {
-      // console.log("Authentication failed:", info.message);
-      res.status(404).json("user not found");
-    }
-
-    req.logIn(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect("/auth/my_account");
-    });
-  })(req, res, next); // Thêm () ở đây để gọi hàm authenticate
-});
+router.post(
+  "/api/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/auth/login",
+    failureFlash: "Wrong",
+  })
+);
 
 router.get("/signup", function (req, res, next) {
   if (req.isAuthenticated()) {
@@ -63,6 +50,8 @@ router.post("/api/logout", (req, res, next) => {
 });
 
 router.post("/api/change_password", isAuth, userControllers.changePassword);
+
+router.post("/api/get_user_by_name", userControllers.getUserByName);
 
 router.post("/api/register", function (req, res, next) {
   const salt = crypto.randomBytes(32).toString("hex");

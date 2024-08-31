@@ -99,7 +99,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username: username, email: email, password: password }),
+                body: JSON.stringify({ user_name: username, user_email: email, user_password: password }),
             }).then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -117,7 +117,7 @@
       $.ajax({
         type: 'GET',  
         url: '/auth/api/username',  // Replace with the actual server-side script
-        data: { username: username },
+        data: { user_name: username },
         success: function(response) {
             console.log(response)
           // Update the availability status based on the server response

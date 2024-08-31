@@ -20,6 +20,16 @@ const changePassword = (user_id, newPassword) => {
   );
 };
 
+const getUserByName = async (user_name) => {
+  const [rows, fields] = await promiseConnection.query(
+    "SELECT * FROM user WHERE user.user_name = ?",
+    [user_name]
+  );
+
+  return JSON.stringify(rows[0]);
+};
+
 module.exports = {
   changePassword,
+  getUserByName,
 };
