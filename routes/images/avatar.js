@@ -1,7 +1,8 @@
 const express = require("express");
 const { upload } = require("../../middleware/upload");
+const userController = require("../../src/user/user.controller");
 const multer = require("multer");
-const { s3Uploadv2 } = require("../../src/images/aws.s3.service");
+const { isAuth } = require("../../middleware/auth");
 const router = express.Router();
 require("dotenv").config();
 
@@ -9,14 +10,12 @@ router.post("/api/upload_image", upload.single("file"), (req, res) => {
   return res.json({ status: "success" });
 });
 
-router.post("/api/upload_images", upload.array("file"), async (req, res) => {
-  try {
-    const results = await s3Uploadv2(req.files);
-    res.json({ status: "success", results });
-  } catch (error) {
-    console.log(error);
-  }
-});
+router.post(
+  "/api/upload_avatar",
+  isAuth,
+  upload.array("file"),
+  userController.updateUserAvatar
+);
 
 router.use((error, req, res, next) => {
   if (error instanceof multer.MulterError) {

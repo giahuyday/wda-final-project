@@ -12,7 +12,7 @@ const usersRouter = require("./routes/user/users");
 const adminRouter = require("./routes/admin/admin");
 const productRouter = require("./routes/product/product");
 const authUser = require("./routes/user/authed");
-const imageRouter = require("./routes/file/avatar");
+const imageRouter = require("./routes/images/avatar");
 const promiseConnection = require("./routes/connection");
 require("dotenv").config();
 

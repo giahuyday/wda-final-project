@@ -17,3 +17,15 @@ exports.s3Uploadv2 = async (file) => {
   );
   return result;
 };
+
+exports.s3Uploadv2s = async (file) => {
+  const s3 = new S3();
+
+  const param = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: `uploads/${uuid()}-${file.originalname}`,
+    Body: file.buffer,
+  };
+  const result = await s3.upload(param).promise();
+  return result;
+};

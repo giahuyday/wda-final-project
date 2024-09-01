@@ -1,4 +1,7 @@
+const { nextTick } = require("process");
 const promiseConnection = require("../../routes/connection");
+const avatarService = require("../images/image.service");
+const avatarController = require("../images/image.controller");
 const crypto = require("crypto");
 
 const changePassword = (user_id, newPassword) => {
@@ -66,8 +69,15 @@ const createNewUser = async (req, res, next) => {
   );
 };
 
+const updateUserAvatar = async (file) => {
+  const urls = await avatarController.uploadImage(file);
+
+  return urls;
+};
+
 module.exports = {
   changePassword,
   getUserByName,
   createNewUser,
+  updateUserAvatar,
 };

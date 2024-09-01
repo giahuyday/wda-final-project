@@ -52,3 +52,14 @@ CREATE TABLE CART(
     FOREIGN KEY (user_id) REFERENCES user(id),
     FOREIGN KEY (product_id) REFERENCES product(id)
 )
+
+CREATE TABLE avatar(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    url NVARCHAR(255),
+
+    created_at DATETIME DEFAULT NOW(),
+    updated_at DATETIME DEFAULT NOW(),
+    is_deleted BOOLEAN DEFAULT FALSE
+    
+    FOREIGN KEY (user_id) REFERENCES user(id)
+)
