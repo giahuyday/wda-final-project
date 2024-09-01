@@ -3,6 +3,7 @@ const { isAuth } = require("../../middleware/auth");
 const categoryController = require("../../src/category/category.controller");
 const productController = require("../../src/product/product.controller");
 const cartController = require("../../src/cart/cart.controller");
+const commentController = require("../../src/comment/comment.controller")
 const router = express.Router();
 
 // Endpoint API để xử lý yêu cầu GET từ client
@@ -21,5 +22,8 @@ router.post("/api/delete_category", categoryController.deleteCategory);
 router.post("/api/add_to_cart", isAuth, cartController.addToCart);
 router.delete("/api/remove_from_cart", isAuth, cartController.removeFromCart);
 router.post("/api/update_quantity", isAuth, cartController.updateCartQuantiy);
+
+router.post("/api/create_comment", isAuth, commentController.createComment);
+router.post("/api/get_product_comment", isAuth, commentController.getCommentByProductId);
 
 module.exports = router;
