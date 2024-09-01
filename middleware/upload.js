@@ -1,17 +1,31 @@
 const multer = require("multer");
-const uuid = require("uuid").v4;
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads");
-  },
-  filename: (req, file, cb) => {
-    const { originalname } = file;
-    cb(null, `${uuid()}-${originalname}`);
-  },
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads");
+//   },
+//   filename: (req, file, cb) => {
+//     const { originalname } = file;
+//     cb(null, `${uuid()}-${originalname}`);
+//   },
+// });
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.split("/")[0] === "image") {
+    cb(null, true);
+  } else {
+    cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 1000000000, files: 2 },
 });
 
-const upload = multer({ storage });
 const multipleUpload = upload.fields([
   { name: "avatar", maxCount: 1 },
   { name: "cover_image", maxCount: 1 },
