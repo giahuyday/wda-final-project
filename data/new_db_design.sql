@@ -51,7 +51,7 @@ CREATE TABLE CART(
 
     FOREIGN KEY (user_id) REFERENCES user(id),
     FOREIGN KEY (product_id) REFERENCES product(id)
-)
+);
 
 CREATE TABLE avatar(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -64,7 +64,7 @@ CREATE TABLE avatar(
     is_deleted BOOLEAN DEFAULT FALSE
     
     FOREIGN KEY (user_id) REFERENCES user(id)
-)
+);
 
 CREATE TABLE product_image(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -76,13 +76,14 @@ CREATE TABLE product_image(
     is_deleted BOOLEAN DEFAULT FALSE,
 
     FOREIGN KEY (product_id) REFERENCES product(id)
-)
+);
 
 CREATE TABLE comment(
     id INT PRIMARY KEY AUTO_INCREMENT,
     content TEXT,
     product_id INT,
-
+    user_id INT,
+    
     created_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (product_id) REFERENCES product(id)
 )
