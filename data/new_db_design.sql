@@ -77,3 +77,12 @@ CREATE TABLE product_image(
 
     FOREIGN KEY (product_id) REFERENCES product(id)
 )
+
+CREATE TABLE comment(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    content TEXT,
+    product_id INT,
+
+    created_at DATETIME DEFAULT NOW(),
+    FOREIGN KEY (product_id) REFERENCES product(id)
+)
