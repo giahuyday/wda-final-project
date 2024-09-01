@@ -57,9 +57,23 @@ CREATE TABLE avatar(
     id INT PRIMARY KEY AUTO_INCREMENT,
     url NVARCHAR(255),
 
+    user_id INT,
+
     created_at DATETIME DEFAULT NOW(),
     updated_at DATETIME DEFAULT NOW(),
     is_deleted BOOLEAN DEFAULT FALSE
     
     FOREIGN KEY (user_id) REFERENCES user(id)
+)
+
+CREATE TABLE product_image(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_url NVARCHAR(255),
+    product_id INT,
+
+    created_at DATETIME DEFAULT NOW(),
+    updated_at DATETIME DEFAULT NOW(),
+    is_deleted BOOLEAN DEFAULT FALSE,
+
+    FOREIGN KEY (product_id) REFERENCES product(id)
 )
