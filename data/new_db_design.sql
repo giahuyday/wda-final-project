@@ -86,4 +86,29 @@ CREATE TABLE comment(
     
     created_at DATETIME DEFAULT NOW(),
     FOREIGN KEY (product_id) REFERENCES product(id)
-)
+);
+
+CREATE TABLE orders(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    total_price INT,
+    status INT,
+
+    user_id INT,
+
+    created_at DATETIME DEFAULT NOW(),
+    updated_at DATETIME DEFAULT NOW(),
+
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+CREATE TABLE order_item(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT,
+    product_id INT,
+    quantity INT,
+
+    created_at DATETIME DEFAULT NOW(),
+
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES product(id)
+);
