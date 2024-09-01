@@ -12,6 +12,7 @@ const usersRouter = require("./routes/user/users");
 const adminRouter = require("./routes/admin/admin");
 const productRouter = require("./routes/product/product");
 const authUser = require("./routes/user/authed");
+const imageRouter = require("./routes/file/avatar");
 const promiseConnection = require("./routes/connection");
 require("dotenv").config();
 
@@ -80,6 +81,7 @@ app.use("/", indexRouter);
 app.use("/auth", usersRouter);
 app.use("/admin", adminRouter);
 app.use("/product", productRouter);
+app.use("/images", imageRouter);
 app.use("/auth", authUser);
 
 // catch 404 and forward to error handler
