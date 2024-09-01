@@ -91,7 +91,7 @@ CREATE TABLE comment(
 CREATE TABLE orders(
     id INT PRIMARY KEY AUTO_INCREMENT,
     total_price INT,
-    status INT,
+    status INT DEFAULT 1,
 
     user_id INT,
 

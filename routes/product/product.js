@@ -4,6 +4,7 @@ const categoryController = require("../../src/category/category.controller");
 const productController = require("../../src/product/product.controller");
 const cartController = require("../../src/cart/cart.controller");
 const commentController = require("../../src/comment/comment.controller")
+const orderController = require("../../src/order_item/order.controller")
 const router = express.Router();
 
 // Endpoint API để xử lý yêu cầu GET từ client
@@ -25,5 +26,8 @@ router.post("/api/update_quantity", isAuth, cartController.updateCartQuantiy);
 
 router.post("/api/create_comment", isAuth, commentController.createComment);
 router.post("/api/get_product_comment", isAuth, commentController.getCommentByProductId);
+
+router.post("/api/create_order", isAuth, orderController.createOrder);
+router.post("/api/addOrderItems", isAuth, orderController.addOrderItems);
 
 module.exports = router;
