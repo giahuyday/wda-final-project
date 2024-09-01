@@ -26,7 +26,7 @@ const updateUserAvatar = async (req, res, next) => {
 
     const result = imageServices.createImages(url, req.user);
 
-    return res.json(result);
+    return res.json(result[0]);
   } catch (error) {
     console.log(error);
   }

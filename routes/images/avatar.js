@@ -1,20 +1,24 @@
 const express = require("express");
 const { upload } = require("../../middleware/upload");
 const userController = require("../../src/user/user.controller");
+const productController = require("../../src/product/product.controller");
 const multer = require("multer");
 const { isAuth } = require("../../middleware/auth");
 const router = express.Router();
 require("dotenv").config();
-
-router.post("/api/upload_image", upload.single("file"), (req, res) => {
-  return res.json({ status: "success" });
-});
 
 router.post(
   "/api/upload_avatar",
   isAuth,
   upload.array("file"),
   userController.updateUserAvatar
+);
+
+router.post(
+  "/api/update_product_images",
+  isAuth,
+  upload.array("file"),
+  productController.createProductImages
 );
 
 router.use((error, req, res, next) => {

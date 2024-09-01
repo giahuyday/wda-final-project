@@ -1,4 +1,6 @@
 const productServices = require("./product.service");
+const awsService = require("../images/aws.s3.service");
+const imageService = require("../images/image.service");
 
 const createProduct = async (req, res) => {
   try {
@@ -13,6 +15,23 @@ const createProduct = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+const createProductImages = async (req, res) => {
+  try {
+    const urls = await awsService.s3Uploadv2(req.files);
+    const url = urls.map((url) => url.key.split("/")[1]);
+    console.log(url);
+    const result = Promise.all(
+      url.map((url) =>
+        imageService.createProductImages(url, Number(req.body.product_id))
+      )
+    );
+    console.log(result);
+    return res.json(result);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -87,6 +106,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   createProduct,
+  createProductImages,
   getProduct,
   getProducts,
   getProductByCategory,
