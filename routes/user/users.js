@@ -47,6 +47,14 @@ router.post("/api/logout", (req, res, next) => {
   });
 });
 
+router.get("/cart", (req, res, next) => {
+  res.render("cart", { title: "Cart" });
+});
+
+router.get("/checkout", (req, res, next) => {
+  res.render("product/checkout", {title: "Checkout"})
+})
+
 router.post("/api/change_password", isAuth, passwordControllers.changePassword);
 
 router.post("/api/get_user_by_name", userControllers.getUserByName);
