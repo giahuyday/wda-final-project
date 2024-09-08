@@ -14,6 +14,7 @@ const productRouter = require("./routes/product/product");
 const authUser = require("./routes/user/authed");
 const imageRouter = require("./routes/images/avatar");
 const promiseConnection = require("./routes/connection");
+const { title } = require("process");
 require("dotenv").config();
 
 const app = express();
@@ -83,6 +84,10 @@ app.use("/admin", adminRouter);
 app.use("/product", productRouter);
 app.use("/images", imageRouter);
 app.use("/auth", authUser);
+
+app.get("*", function (req, res) {
+  res.render("notfound", {title: "Not Found"})
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
